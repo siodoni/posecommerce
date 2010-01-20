@@ -324,10 +324,20 @@ create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 4 in
 create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 8 increment by 1 nocache;
 --
 create or replace view menu as
-select b.descricao departamento,
-       c.descricao sub_departamento,
-       e.descricao marca,
-       d.descricao modelo
+select b.id_departamento     id_departamento,
+       b.descricao           departamento,
+       b.id_departamento
+     ||c.id_sub_departamento id_sub_departamento,
+       c.descricao           sub_departamento,
+       b.id_departamento
+     ||c.id_sub_departamento
+     ||e.id_marca            id_marca,
+       e.descricao           marca,
+       b.id_departamento
+     ||c.id_sub_departamento
+     ||e.id_marca
+     ||d.id_modelo           id_modelo,
+       d.descricao           modelo
   from marca            e,
        modelo           d,
        sub_departamento c,
@@ -337,11 +347,12 @@ select b.descricao departamento,
    and c.id_sub_departamento = a.sub_departamento
    and d.id_modelo           = a.modelo
    and e.id_marca            = d.marca
- group by b.descricao,
+ group by b.id_departamento,
+          b.descricao,
+          c.id_sub_departamento,
           c.descricao,
+          e.id_marca,
           e.descricao,
+          d.id_modelo,
           d.descricao
- order by b.descricao,
-          c.descricao,
-          e.descricao,
-          d.descricao;
+ order by b.id_departamento || c.id_sub_departamento || e.id_marca || d.id_modelo;
