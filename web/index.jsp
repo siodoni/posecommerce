@@ -7,5 +7,7 @@
     </head>
     <body>
         <h1>Começando...</h1>
+        <a href="cor.jsp">Cor</a><br/>
+        <a href="menu.jsp">menu</a>
     </body>
 </html>
