@@ -20,8 +20,8 @@ public class Conexao {
      * @param servico Instancia do banco de dados, informe DESV, TEST ou PROD.
      */
     public Conexao() {
-        Conexao.url = "jdbc:oracle:thin:@10.120.0.213:1521:DESV";
-        //Conexao.url = "jdbc:oracle:thin:@localhost:1521:XE";
+        //Conexao.url = "jdbc:oracle:thin:@10.120.0.213:1521:DESV";
+        Conexao.url = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
     }
 
     /**
@@ -33,10 +33,10 @@ public class Conexao {
      */
     public Connection metodoConecta() throws ClassNotFoundException, SQLException, NamingException {
         Class.forName("oracle.jdbc.driver.OracleDriver");
-        //props.put("user",     "loja");
-        //props.put("password", "loja");
-        props.put("user",     "desenv");
-        props.put("password", "desenv");
+        props.put("user",     "loja");
+        props.put("password", "loja");
+        //props.put("user",     "desenv");
+        //props.put("password", "desenv");
         conn = DriverManager.getConnection(Conexao.url, props);
         return conn;
     }
