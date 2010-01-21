@@ -176,6 +176,70 @@ create or replace package body pECommerce is
 end pECommerce;
 /
 --
+begin
+  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
+  values (1, 'PRETO', '000000');
+  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
+  values (2, 'BRANCO', 'FFFFFF');
+  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
+  values (3, 'AZUL', '0000FF');
+  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
+  values (4, 'VERMELHO', 'FF0000');
+  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
+  values (5, 'VERDE', '00FF00');
+  commit;
+  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
+  values (1, 'CORDAS');
+  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
+  values (2, 'TECLAS');
+  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
+  values (3, 'PERCUSSÃO');
+  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
+  values (4, 'AUDIO');
+  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
+  values (1, 'GUITARRAS');
+  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
+  values (2, 'BAIXOS');
+  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
+  values (3, 'BATERIAS');
+  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
+  values (4, 'TECLADOS');
+  commit;
+  insert into MARCA (ID_MARCA, DESCRICAO)
+  values (1, 'FENDER');
+  insert into MARCA (ID_MARCA, DESCRICAO)
+  values (2, 'GIBSON');
+  insert into MARCA (ID_MARCA, DESCRICAO)
+  values (3, 'GIANNINI');
+  insert into MARCA (ID_MARCA, DESCRICAO)
+  values (4, 'MAPEX');
+  commit;
+  insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
+  values (1, 1, 'JAZZ BASS');
+  insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
+  values (2, 1, 'STRATO');
+  insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
+  values (3, 2, 'LES PAUL');
+  commit;
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
+  values (1, 'GUITARRA', 1, 1, 2, 5, 'UN', 2500, null, 1);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
+  values (2, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 1);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
+  values (3, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 2);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
+  values (4, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 3);
+  commit;
+end;
+/
+--
+create sequence scor             minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
+create sequence smarca           minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
+create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 3 increment by 1 nocache;
+create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
+create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
+create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 8 increment by 1 nocache;
+--
 create or replace trigger tmarca_b_iud_r
   before insert
       or update
@@ -259,67 +323,3 @@ begin
   end if;
 end tcor_b_iud_r;
 /
---
-begin
-  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
-  values (1, 'PRETO', '000000');
-  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
-  values (2, 'BRANCO', 'FFFFFF');
-  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
-  values (3, 'AZUL', '0000FF');
-  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
-  values (4, 'VERMELHO', 'FF0000');
-  insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
-  values (5, 'VERDE', '00FF00');
-  commit;
-  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
-  values (1, 'CORDAS');
-  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
-  values (2, 'TECLAS');
-  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
-  values (3, 'PERCUSSÃO');
-  insert into DEPARTAMENTO (ID_DEPARTAMENTO, DESCRICAO)
-  values (4, 'AUDIO');
-  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
-  values (1, 'GUITARRAS');
-  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
-  values (2, 'BAIXOS');
-  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
-  values (3, 'BATERIAS');
-  insert into SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO, DESCRICAO)
-  values (4, 'TECLADOS');
-  commit;
-  insert into MARCA (ID_MARCA, DESCRICAO)
-  values (1, 'FENDER');
-  insert into MARCA (ID_MARCA, DESCRICAO)
-  values (2, 'GIBSON');
-  insert into MARCA (ID_MARCA, DESCRICAO)
-  values (3, 'GIANNINI');
-  insert into MARCA (ID_MARCA, DESCRICAO)
-  values (4, 'MAPEX');
-  commit;
-  insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
-  values (1, 1, 'JAZZ BASS');
-  insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
-  values (2, 1, 'STRATO');
-  insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
-  values (3, 2, 'LES PAUL');
-  commit;
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (1, 'GUITARRA', 1, 1, 2, 5, 'UN', 2500, null, 1);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (2, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 1);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (3, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 2);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (4, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 3);
-  commit;
-end;
-/
---
-create sequence scor             minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
-create sequence smarca           minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
-create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 3 increment by 1 nocache;
-create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
-create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
-create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 8 increment by 1 nocache;
