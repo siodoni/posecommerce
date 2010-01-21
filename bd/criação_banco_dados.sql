@@ -1,3 +1,4 @@
+drop package body pECommerce;
 drop package pECommerce;
 --
 drop sequence scor;
