@@ -20,19 +20,19 @@
                                 out.println("d.add(0,-1,'Menu','javascript:document.write()');");
 
                                 String sql =
-                                        "  select b.id_departamento     id_departamento, "
-                                        + "       initcap(b.descricao)  departamento, "
-                                        + "       b.id_departamento "
-                                        + "     ||c.id_sub_departamento id_sub_departamento, "
-                                        + "       initcap(c.descricao)  sub_departamento, "
-                                        + "       b.id_departamento "
-                                        + "     ||c.id_sub_departamento "
-                                        + "     ||e.id_marca            id_marca, "
+                                        "  select nvl(b.id_departamento,0)     id_departamento, "
+                                        + "       initcap(b.descricao)         departamento, "
+                                        + "       nvl(b.id_departamento,0) "
+                                        + "     ||nvl(c.id_sub_departamento,0) id_sub_departamento, "
+                                        + "       initcap(c.descricao)         sub_departamento, "
+                                        + "       nvl(b.id_departamento,0) "
+                                        + "     ||nvl(c.id_sub_departamento,0) "
+                                        + "     ||nvl(e.id_marca,0)            id_marca, "
                                         + "       initcap(e.descricao)  marca, "
-                                        + "       b.id_departamento "
-                                        + "     ||c.id_sub_departamento "
-                                        + "     ||e.id_marca "
-                                        + "     ||d.id_modelo           id_modelo, "
+                                        + "       nvl(b.id_departamento,0) "
+                                        + "     ||nvl(c.id_sub_departamento,0) "
+                                        + "     ||nvl(e.id_marca,0) "
+                                        + "     ||nvl(d.id_modelo,0)    id_modelo, "
                                         + "       initcap(d.descricao)  modelo "
                                         + "  from marca            e, "
                                         + "       modelo           d, "
@@ -65,13 +65,13 @@
 
                                 while (rs.next()) {
                                     //Departamento
-                                    out.println("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','javascript:document.write()');");
+                                    out.println("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');");
                                     //Sub-Departamento
-                                    out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','javascript:document.write()');");
+                                    out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');");
                                     //Marca
-                                    out.println("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','javascript:document.write()');");
+                                    out.println("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');");
                                     //Modelo
-                                    out.println("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "');");
+                                    out.println("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');");
                                 }
 
                                 rs.getStatement().close();
