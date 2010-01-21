@@ -10,19 +10,37 @@
     <body>
         <%
                     String produto = request.getParameter("pProduto");
+                    String nivel = request.getParameter("pNivel");
                     String sql =
-                            "  select '<tr><td colspan=2><img src=''' || nvl(a.imagem,'img/sem_foto.png') || '''/></td></tr>' imagem, "
-                            + "       '<tr><td>Descrição</td><td>'|| a.descricao || ' - ' || b.descricao || '</td></tr>' descricao, "
-                            + "       '<tr><td>Marca</td><td>'|| c.descricao || '</td></tr>' marca, "
-                            + "       '<tr><td>Quantidade</td><td>'|| a.quantidade || '</td></tr>' quantidade, "
-                            + "       '<tr><td>Preço unitário</td><td>'|| to_char(a.preco_unit,'fm9g999g999d00') || '</td></tr>' preco_unit, "
-                            + "       '<tr><td>Cor</td><td>'|| d.descricao || '</td></tr>' cor, "
+                            "select '<tr><td colspan=2><img src=''' || nvl(a.imagem, 'img/sem_foto.png') || "
+                            + "       '''/></td></tr>' imagem, "
+                            + "       '<tr><td>Descrição</td><td>' || a.descricao || ' - ' || b.descricao || "
+                            + "       '</td></tr>' descricao, "
+                            + "       '<tr><td>Marca</td><td>' || c.descricao || '</td></tr>' marca, "
+                            + "       '<tr><td>Quantidade</td><td>' || a.quantidade || '</td></tr>' quantidade, "
+                            + "       '<tr><td>Preço unitário</td><td>' || "
+                            + "       to_char(a.preco_unit, 'fm9g999g999d00') || '</td></tr>' preco_unit, "
+                            + "       '<tr><td>Cor</td><td>' || d.descricao || '</td></tr>' cor, "
                             + "       '<tr><td colspan=2><hr/></td></tr>' divisor "
-                            + "  from cor d, "
-                            + "       marca c, "
-                            + "       modelo b, "
-                            + "       produto a "
-                            + " where a.departamento || a.sub_departamento || b.marca || a.modelo = ? "
+                            + "  from cor d, marca c, modelo b, produto a "
+                            + " where ( "
+                            + "        ( "
+                            + "         ? = 1 "
+                            + "   and   nvl(a.departamento, 0) = ? "
+                            + "        ) "
+                            + "    or  ( "
+                            + "         ? = 2 "
+                            + "   and   nvl(a.departamento, 0) || nvl(a.sub_departamento, 0) = ? "
+                            + "        ) "
+                            + "    or  ( "
+                            + "        ? = 3 "
+                            + "   and  nvl(a.departamento, 0) || nvl(a.sub_departamento, 0) || nvl(b.marca, 0) = ? "
+                            + "        ) "
+                            + "    or  ( "
+                            + "        ? = 4 "
+                            + "   and  nvl(a.departamento, 0) || nvl(a.sub_departamento, 0) || nvl(b.marca, 0) || nvl(a.modelo, 0) = ? "
+                            + "        ) "
+                            + "       ) "
                             + "   and b.id_modelo = a.modelo "
                             + "   and c.id_marca  = b.marca "
                             + "   and d.id_cor    = a.cor ";
@@ -35,7 +53,14 @@
                     conecta = new Conexao();
                     conn = conecta.metodoConecta();
                     clst = conn.prepareCall(sql);
-                    clst.setString(1, produto);
+                    clst.setString(1, nivel);
+                    clst.setString(2, produto);
+                    clst.setString(3, nivel);
+                    clst.setString(4, produto);
+                    clst.setString(5, nivel);
+                    clst.setString(6, produto);
+                    clst.setString(7, nivel);
+                    clst.setString(8, produto);
                     rs = clst.executeQuery();
 
                     out.println("<table>");
@@ -49,6 +74,10 @@
                         out.println(rs.getString(7));
                     }
                     out.println("</table>");
+
+                    System.out.println("sql " + sql);
+                    System.out.println("produto " + produto);
+                    System.out.println("nivel " + nivel);
 
                     rs.getStatement().close();
                     clst.close();
