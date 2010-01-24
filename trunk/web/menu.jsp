@@ -13,7 +13,6 @@
             <tr>
                 <td width="20%" height="100%" valign="top">
                     <%
-
                                 out.println("<script type='text/javascript'>");
                                 out.println("d = new dTree('d');");
                                 out.println("d.config.target = 'FrameMain';");
@@ -28,12 +27,12 @@
                                         + "       nvl(b.id_departamento,0) "
                                         + "     ||nvl(c.id_sub_departamento,0) "
                                         + "     ||nvl(e.id_marca,0)            id_marca, "
-                                        + "       initcap(e.descricao)  marca, "
+                                        + "       initcap(e.descricao)         marca, "
                                         + "       nvl(b.id_departamento,0) "
                                         + "     ||nvl(c.id_sub_departamento,0) "
                                         + "     ||nvl(e.id_marca,0) "
-                                        + "     ||nvl(d.id_modelo,0)    id_modelo, "
-                                        + "       initcap(d.descricao)  modelo "
+                                        + "     ||nvl(d.id_modelo,0)           id_modelo, "
+                                        + "       initcap(d.descricao)         modelo "
                                         + "  from marca            e, "
                                         + "       modelo           d, "
                                         + "       sub_departamento c, "
@@ -53,6 +52,8 @@
                                         + "          d.descricao "
                                         + " order by b.id_departamento || c.id_sub_departamento || e.id_marca || d.id_modelo ";
 
+                                String deptoAnt = "", subDeptoAnt = "", marcaAnt = "", modeloAnt = "";
+
                                 Connection conn;
                                 ResultSet rs;
                                 Conexao conecta;
@@ -65,13 +66,29 @@
 
                                 while (rs.next()) {
                                     //Departamento
-                                    out.println("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');");
+                                    if (!deptoAnt.equalsIgnoreCase("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');")) {
+                                        out.println("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');");
+                                    }
+
                                     //Sub-Departamento
-                                    out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');");
+                                    if (!subDeptoAnt.equalsIgnoreCase("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');")) {
+                                        out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');");
+                                    }
+
                                     //Marca
-                                    out.println("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');");
+                                    if (!marcaAnt.equalsIgnoreCase("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');")) {
+                                        out.println("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');");
+                                    }
+
                                     //Modelo
-                                    out.println("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');");
+                                    if (!modeloAnt.equalsIgnoreCase("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');")) {
+                                        out.println("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');");
+                                    }
+
+                                    deptoAnt = "d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');";
+                                    subDeptoAnt = "d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');";
+                                    marcaAnt = "d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');";
+                                    modeloAnt = "d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');";
                                 }
 
                                 rs.getStatement().close();

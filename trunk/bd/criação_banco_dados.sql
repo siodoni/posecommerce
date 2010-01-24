@@ -222,13 +222,15 @@ begin
   values (3, 2, 'LES PAUL');
   commit;
   insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (1, 'GUITARRA', 1, 1, 2, 5, 'UN', 2500, null, 1);
+  values (1, 'GUITARRA', 1, 1, 2, 5, 'UN', 2500, 'fender_strato.jpg', 1);
   insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (2, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 1);
+  values (2, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, 'fender_jazz_bass.jpg', 1);
   insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (3, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 2);
+  values (3, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, 'fender_jazz_bass.jpg', 2);
   insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (4, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, null, 3);
+  values (4, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, 'fender_jazz_bass.jpg', 3);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
+  values (5, 'GUITARRA', 1, 1, 3, 5, 'UN', 2500, 'gibson_les_paul.jpg', 1);
   commit;
 end;
 /
