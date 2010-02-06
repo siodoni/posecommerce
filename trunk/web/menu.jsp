@@ -66,29 +66,29 @@
 
                                 while (rs.next()) {
                                     //Departamento
-                                    if (!deptoAnt.equalsIgnoreCase("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');")) {
-                                        out.println("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');");
+                                    if (!deptoAnt.equalsIgnoreCase("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','listaProduto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');")) {
+                                        out.println("d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','listaProduto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');");
                                     }
 
                                     //Sub-Departamento
-                                    if (!subDeptoAnt.equalsIgnoreCase("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');")) {
-                                        out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');");
+                                    if (!subDeptoAnt.equalsIgnoreCase("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto?pProduto=" + rs.getString(3) + "&pNivel=2');")) {
+                                        out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto?pProduto=" + rs.getString(3) + "&pNivel=2');");
                                     }
 
                                     //Marca
-                                    if (!marcaAnt.equalsIgnoreCase("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');")) {
-                                        out.println("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');");
+                                    if (!marcaAnt.equalsIgnoreCase("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','listaProduto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');")) {
+                                        out.println("d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','listaProduto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');");
                                     }
 
                                     //Modelo
-                                    if (!modeloAnt.equalsIgnoreCase("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');")) {
-                                        out.println("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');");
+                                    if (!modeloAnt.equalsIgnoreCase("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','listaProduto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');")) {
+                                        out.println("d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','listaProduto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');");
                                     }
 
-                                    deptoAnt = "d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','lista_produto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');";
-                                    subDeptoAnt = "d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','lista_produto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');";
-                                    marcaAnt = "d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','lista_produto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');";
-                                    modeloAnt = "d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','lista_produto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');";
+                                    deptoAnt = "d.add(" + rs.getString(1) + ",0,'" + rs.getString(2) + "','listaProduto.jsp?pProduto=" + rs.getString(1) + "&pNivel=1');";
+                                    subDeptoAnt = "d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');";
+                                    marcaAnt = "d.add(" + rs.getString(5) + "," + rs.getString(3) + ",'" + rs.getString(6) + "','listaProduto.jsp?pProduto=" + rs.getString(5) + "&pNivel=3');";
+                                    modeloAnt = "d.add(" + rs.getString(7) + "," + rs.getString(5) + ",'" + rs.getString(8) + "','listaProduto.jsp?pProduto=" + rs.getString(7) + "&pNivel=4');";
                                 }
 
                                 rs.getStatement().close();
