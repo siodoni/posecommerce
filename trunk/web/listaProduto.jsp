@@ -13,7 +13,7 @@
                     String produto = request.getParameter("pProduto");
                     String nivel = request.getParameter("pNivel");
                     String sql =
-                            "select '<tr><td colspan=2><img src=''img/' || nvl(a.imagem, 'sem_foto.png') || "
+                            "  select '<tr><td colspan=2><img src=''img/' || nvl(a.imagem, 'sem_foto.png') || "
                             + "       '''/></td></tr>' imagem, "
                             + "       '<tr><td>Descrição</td><td>' || a.descricao || ' - ' || b.descricao || "
                             + "       '</td></tr>' descricao, "
@@ -98,6 +98,7 @@
                         if (!tableAnt.equalsIgnoreCase("<table>")) {
                             out.println("<table>");
                         }
+
                         out.println(rs.getString(1));
                         out.println(rs.getString(2));
                         out.println(rs.getString(3));
@@ -105,6 +106,7 @@
                         out.println(rs.getString(5));
                         out.println(rs.getString(6));
                         out.println(rs.getString(7));
+
                         tableAnt = "<table>";
                         localAnt = rs.getString(8) + "<br/><br/>";
                     }

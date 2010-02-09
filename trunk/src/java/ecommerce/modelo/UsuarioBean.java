@@ -1,7 +1,6 @@
 package ecommerce.modelo;
 
 import ecommerce.bd.Conexao;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,33 +38,34 @@ public class UsuarioBean {
         this.usuario = usuario;
     }
 
-public boolean login() {
+    public boolean login() {
         boolean acesso = false;
 
         try {
-            
             Connection conn;
-            ResultSet rs;
             Conexao conecta;
 
             conecta = new Conexao();
             conn = conecta.metodoConecta();
 
             String sql =
-                    "select *" +
-                    "  from usuarios" +
-                    " where usuario = ? and senha = ?";
+                    "  select usuario,"
+                    + "       senha "
+                    + "  from usuario "
+                    + " where usuario = ? "
+                    + "   and senha = ? ";
+
             PreparedStatement pre = conn.prepareStatement(sql);
             pre.setString(1, this.getUsuario());
             pre.setString(2, this.getSenha());
             ResultSet dados = pre.executeQuery();
+
             acesso = dados.next() ? true : false;
             conn.close();
+
         } catch (Exception e) {
             System.out.println("Erro! " + e.getMessage());
         }
-
         return acesso;
     }
-
 }

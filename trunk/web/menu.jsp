@@ -71,8 +71,8 @@
                                     }
 
                                     //Sub-Departamento
-                                    if (!subDeptoAnt.equalsIgnoreCase("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto?pProduto=" + rs.getString(3) + "&pNivel=2');")) {
-                                        out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto?pProduto=" + rs.getString(3) + "&pNivel=2');");
+                                    if (!subDeptoAnt.equalsIgnoreCase("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');")) {
+                                        out.println("d.add(" + rs.getString(3) + "," + rs.getString(1) + ",'" + rs.getString(4) + "','listaProduto.jsp?pProduto=" + rs.getString(3) + "&pNivel=2');");
                                     }
 
                                     //Marca
@@ -94,6 +94,8 @@
                                 rs.getStatement().close();
                                 clst.close();
                                 conn.close();
+
+                                out.println("d.add(999999,0,'Area Administrativa','adm/index.jsp');");
 
                                 out.println("document.write(d)");
                                 out.println("</script>");
