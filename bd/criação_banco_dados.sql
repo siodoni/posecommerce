@@ -7,6 +7,7 @@ drop sequence smodelo;
 drop sequence sdepartamento;
 drop sequence ssubdepartamento;
 drop sequence sproduto;
+drop sequence susuario;
 --
 drop table cor              cascade constraints;
 drop table marca            cascade constraints;
@@ -14,6 +15,17 @@ drop table departamento     cascade constraints;
 drop table sub_departamento cascade constraints;
 drop table modelo           cascade constraints;
 drop table produto          cascade constraints;
+drop table usuario          cascade constraints;
+--
+create table USUARIO
+(ID_USUARIO  NUMBER       not null,
+ USUARIO     VARCHAR2(20) not null,
+ SENHA       VARCHAR2(20) not null);
+comment on column USUARIO.ID_USUARIO is 'Identificador do usuario.';
+comment on column USUARIO.USUARIO    is 'Nome do Usuario.';
+comment on column USUARIO.SENHA      is 'Senha do Usuario.';
+alter table USUARIO add constraint PKUSUARIO primary key (ID_USUARIO) using index;
+alter table USUARIO add constraint UNUSUARIO unique      (USUARIO)    using index;
 --
 create table COR
 (ID_COR      NUMBER       not null,
@@ -177,6 +189,9 @@ end pECommerce;
 /
 --
 begin
+  insert into usuario (id_usuario, usuario, senha)
+  values (1, 'admin', 123);
+  commit;
   insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
   values (1, 'PRETO', '000000');
   insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
@@ -241,6 +256,7 @@ create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 3 in
 create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
 create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
 create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 8 increment by 1 nocache;
+create sequence susuario         minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
 --
 create or replace trigger tmarca_b_iud_r
   before insert
@@ -324,4 +340,17 @@ begin
   then :new.id_cor := pECommerce.fRetornaSequence('SCOR','N');
   end if;
 end tcor_b_iud_r;
+/
+create or replace trigger tusuario_b_iud_r
+  before insert
+      or update
+      or delete
+      on usuario
+  for each row
+begin
+  if   inserting
+  and  :new.id_usuario is null
+  then :new.id_usuario := pECommerce.fRetornaSequence('SUSUARIO','N');
+  end if;
+end tusuario_b_iud_r;
 /

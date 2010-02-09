@@ -33,9 +33,11 @@ public class Conexao {
      */
     public Connection metodoConecta() throws ClassNotFoundException, SQLException, NamingException {
         Class.forName("oracle.jdbc.driver.OracleDriver");
-        props.put("user",     "hr");
+        props.put("user", "hr");
         props.put("password", "123");
-        //props.put("user",     "desenv");
+        //props.put("user", "loja");
+        //props.put("password", "loja");
+        //props.put("user", "desenv");
         //props.put("password", "desenv");
         conn = DriverManager.getConnection(Conexao.url, props);
         return conn;
