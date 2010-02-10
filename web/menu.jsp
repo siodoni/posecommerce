@@ -18,6 +18,8 @@
                                 out.println("d.config.target = 'FrameMain';");
                                 out.println("d.add(0,-1,'Menu','javascript:document.write()');");
 
+                                //Só aparece no menu produtos com quantidade
+                                //disponivel no estoque maior que ZERO.
                                 String sql =
                                         "  select nvl(b.id_departamento,0)     id_departamento, "
                                         + "       initcap(b.descricao)         departamento, "
@@ -42,6 +44,10 @@
                                         + "   and c.id_sub_departamento = a.sub_departamento "
                                         + "   and d.id_modelo           = a.modelo "
                                         + "   and e.id_marca            = d.marca "
+                                        + "   and exists                (select 1 "
+                                        + "                                from estoque aa "
+                                        + "                               where aa.produto = a.id_produto "
+                                        + "                              having sum(aa.qtde_disp) > 0) "
                                         + " group by b.id_departamento, "
                                         + "          b.descricao, "
                                         + "          c.id_sub_departamento, "

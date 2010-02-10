@@ -8,6 +8,7 @@ drop sequence sdepartamento;
 drop sequence ssubdepartamento;
 drop sequence sproduto;
 drop sequence susuario;
+drop sequence sestoque;
 --
 drop table cor              cascade constraints;
 drop table marca            cascade constraints;
@@ -16,6 +17,7 @@ drop table sub_departamento cascade constraints;
 drop table modelo           cascade constraints;
 drop table produto          cascade constraints;
 drop table usuario          cascade constraints;
+drop table estoque          cascade constraints;
 --
 create table USUARIO
 (ID_USUARIO  NUMBER       not null,
@@ -79,9 +81,9 @@ create table PRODUTO
  DEPARTAMENTO     NUMBER        not null,
  SUB_DEPARTAMENTO NUMBER        not null,
  MODELO           NUMBER        not null,
- QUANTIDADE       NUMBER(12,2)  not null,
- UNIDADE          VARCHAR2(3)   not null,
- PRECO_UNIT       NUMBER(12,2)  not null,
+-- QUANTIDADE       NUMBER(12,2)  not null,
+-- UNIDADE          VARCHAR2(3)   not null,
+-- PRECO_UNIT       NUMBER(12,2)  not null,
  COR              NUMBER,
  IMAGEM           VARCHAR2(200));
 comment on column PRODUTO.ID_PRODUTO       is 'Identificador do produto.';
@@ -89,9 +91,9 @@ comment on column PRODUTO.DESCRICAO        is 'Descrição do produto.';
 comment on column PRODUTO.DEPARTAMENTO     is 'Identificador do departamento.';
 comment on column PRODUTO.SUB_DEPARTAMENTO is 'Identificador do sub-departamento.';
 comment on column PRODUTO.MODELO           is 'Identificador do modelo.';
-comment on column PRODUTO.QUANTIDADE       is 'Quantidade.';
-comment on column PRODUTO.UNIDADE          is 'Unidade de medida.';
-comment on column PRODUTO.PRECO_UNIT       is 'Preço unitário do produto.';
+--comment on column PRODUTO.QUANTIDADE       is 'Quantidade.';
+--comment on column PRODUTO.UNIDADE          is 'Unidade de medida.';
+--comment on column PRODUTO.PRECO_UNIT       is 'Preço unitário do produto.';
 comment on column PRODUTO.COR              is 'Identificador da cor.';
 comment on column PRODUTO.IMAGEM           is 'Endereço da imagem do produto.';
 alter table PRODUTO add constraint PKPRODUTO                  primary key (ID_PRODUTO)        using index;
@@ -99,6 +101,24 @@ alter table PRODUTO add constraint FKPRODUTO_COR              foreign key (COR) 
 alter table PRODUTO add constraint FKPRODUTO_DEPARTAMENTO     foreign key (DEPARTAMENTO)      references DEPARTAMENTO     (ID_DEPARTAMENTO);
 alter table PRODUTO add constraint FKPRODUTO_SUB_DEPARTAMENTO foreign key (SUB_DEPARTAMENTO)  references SUB_DEPARTAMENTO (ID_SUB_DEPARTAMENTO);
 alter table PRODUTO add constraint FKPRODUTO_MODELO           foreign key (MODELO)            references MODELO           (ID_MODELO);
+--
+create table ESTOQUE
+(ID_ESTOQUE NUMBER not null,
+ PRODUTO    NUMBER not null,
+ DT_AQUIS   DATE not null,
+ VLR_AQUIS  NUMBER(12,2) not null,
+ QTDE_AQUIS NUMBER(12,2) not null,
+ QTDE_DISP  NUMBER(12,2) not null,
+ VLR_VENDA  NUMBER(12,2) not null);
+comment on column ESTOQUE.ID_ESTOQUE is 'Identificador do movimento de estoque.';
+comment on column ESTOQUE.PRODUTO    is 'Identificador do produto.';
+comment on column ESTOQUE.DT_AQUIS   is 'Data de aquisição do produto.';
+comment on column ESTOQUE.VLR_AQUIS  is 'Valor de aquisição do produto.';
+comment on column ESTOQUE.QTDE_AQUIS is 'Quantidade de aquisição do produto.';
+comment on column ESTOQUE.QTDE_DISP  is 'Identifica a quantidade disponivel em estoque.';
+comment on column ESTOQUE.VLR_VENDA  is 'Valor de venda do produto (valor que será mostrado ao cliente).';
+alter table ESTOQUE add constraint PKESTOQUE         primary key (ID_ESTOQUE) using index;
+alter table ESTOQUE add constraint FKESTOQUE_PRODUTO foreign key (PRODUTO)    references PRODUTO (ID_PRODUTO);
 --
 create or replace package pECommerce is
 --
@@ -112,6 +132,16 @@ create or replace package pECommerce is
   -- ================================
   function fRetornaSequence(pNomeSequence  varchar2,
                             pValor         varchar2 := 'N') return number;
+  --
+  -- Função que retorna o valor de venda.
+  -- pMaxMin - deve receber MAX para o maior valor ou MIN para o menor valor.
+  -- ========================================================================
+  function fRetornaVlrVenda(pProduto number,
+                            pMaxMin  varchar2) return number;
+  --
+  -- Função que retorna o total disponivel de um produto em estoque.
+  -- ===============================================================
+  function fRetornaQtdDisp(pProduto number) return number;
   --
   -- Função que retorna a tabela de cores HTML.
   -- ==========================================
@@ -140,6 +170,51 @@ create or replace package body pECommerce is
     execute immediate 'select ' || pNomeSequence || vValor || ' from dual' into vResposta;
     return vResposta;
   end fRetornaSequence;
+  --
+  -- Função que retorna o valor de venda.
+  -- pMaxMin - deve receber MAX para o maior valor ou MIN para o menor valor.
+  -- ========================================================================
+  function fRetornaVlrVenda(pProduto number,
+                            pMaxMin  varchar2) return number is
+    --
+    cursor cEstoque is
+      select max(a.vlr_venda) maximo,
+             min(a.vlr_venda) minimo
+        from estoque a
+       where a.produto = pProduto;
+    --
+    vEstoque   cEstoque%rowtype;
+    vResposta  number;
+  begin
+    open cEstoque;
+    fetch cEstoque into vEstoque;
+    close cEstoque;
+    --
+    if pMaxMin = 'MAX'
+    then vResposta := vEstoque.maximo;
+    else vResposta := vEstoque.minimo;
+    end if;
+    --
+    return vResposta;
+  end fRetornaVlrVenda;
+  --
+  -- Função que retorna o total disponivel de um produto em estoque.
+  -- ===============================================================
+  function fRetornaQtdDisp(pProduto number) return number is
+    --
+    cursor cEstoque is
+      select sum(a.qtde_disp) qtde_disp
+        from estoque a
+       where a.produto = pProduto;
+    --
+    vResposta  number;
+  begin
+    open cEstoque;
+    fetch cEstoque into vResposta;
+    close cEstoque;
+    --
+    return vResposta;
+  end fRetornaQtdDisp;
   --
   -- Função que retorna a tabela de cores HTML.
   -- ==========================================
@@ -189,9 +264,6 @@ end pECommerce;
 /
 --
 begin
-  insert into usuario (id_usuario, usuario, senha)
-  values (1, 'admin', 123);
-  commit;
   insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
   values (1, 'PRETO', '000000');
   insert into COR (ID_COR, DESCRICAO, CODIGO_HTML)
@@ -236,16 +308,16 @@ begin
   insert into MODELO (ID_MODELO, MARCA, DESCRICAO)
   values (3, 2, 'LES PAUL');
   commit;
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (1, 'GUITARRA', 1, 1, 2, 5, 'UN', 2500, 'fender_strato.jpg', 1);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (2, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, 'fender_jazz_bass.jpg', 1);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (3, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, 'fender_jazz_bass.jpg', 2);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (4, 'BAIXO', 1, 2, 1, 3, 'UN', 2700, 'fender_jazz_bass.jpg', 3);
-  insert into PRODUTO (ID_PRODUTO, DESCRICAO, DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, QUANTIDADE, UNIDADE, PRECO_UNIT, IMAGEM, COR)
-  values (5, 'GUITARRA', 1, 1, 3, 5, 'UN', 2500, 'gibson_les_paul.jpg', 1);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO,  DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, IMAGEM, COR)
+  values (1, 'GUITARRA', 1, 1, 2, 'fender_strato.jpg', 1);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO,  DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, IMAGEM, COR)
+  values (2, 'BAIXO', 1, 2, 1, 'fender_jazz_bass.jpg', 1);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO,  DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, IMAGEM, COR)
+  values (3, 'BAIXO', 1, 2, 1, 'fender_jazz_bass.jpg', 2);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO,  DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, IMAGEM, COR)
+  values (4, 'BAIXO', 1, 2, 1, 'fender_jazz_bass.jpg', 3);
+  insert into PRODUTO (ID_PRODUTO, DESCRICAO,  DEPARTAMENTO, SUB_DEPARTAMENTO, MODELO, IMAGEM, COR)
+  values (5,'GUITARRA', 1, 1, 3, 'gibson_les_paul.jpg', 1);
   commit;
 end;
 /
@@ -256,7 +328,8 @@ create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 3 in
 create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
 create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
 create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 8 increment by 1 nocache;
-create sequence susuario         minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
+create sequence susuario         minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
+create sequence sestoque         minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
 --
 create or replace trigger tmarca_b_iud_r
   before insert
@@ -353,4 +426,41 @@ begin
   then :new.id_usuario := pECommerce.fRetornaSequence('SUSUARIO','N');
   end if;
 end tusuario_b_iud_r;
+/
+create or replace trigger testoque_b_iud_r
+  before insert
+      or update
+      or delete
+      on estoque
+  for each row
+begin
+  if   inserting
+  and  :new.id_estoque is null
+  then :new.id_estoque := pECommerce.fRetornaSequence('SESTOQUE','N');
+  end if;
+end testoque_b_iud_r;
+/
+--
+begin
+  insert into usuario (usuario, senha)
+  values ('admin', 123);
+  commit;
+  --
+  insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
+  values (1, to_date('01/02/2010','dd/mm/rrrr'), 1850.75, 5, 4, 2499.90);
+  --  
+  insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
+  values (2, to_date('01/02/2010','dd/mm/rrrr'), 1953.15, 3, 1, 2599.90);
+  --
+  insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
+  values (3, to_date('01/02/2010','dd/mm/rrrr'), 2115.17, 3, 2, 2699.90);
+  --
+  insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
+  values (4, to_date('01/02/2010','dd/mm/rrrr'), 1615.50, 3, 1, 1899.90);
+  --
+  insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
+  values (5, to_date('01/02/2010','dd/mm/rrrr'), 1980.20, 3, 2, 2749.90);
+  --
+  commit;
+end;
 /
