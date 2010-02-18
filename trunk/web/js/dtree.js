@@ -24,8 +24,8 @@ function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
     this._ls = false;
     this._hc = false;
     this._ai = 0;
-    this._p;
-};
+/*this._p;*/
+}
 
 // Tree object
 function dTree(objName) {
@@ -63,7 +63,7 @@ function dTree(objName) {
     this.selectedNode = null;
     this.selectedFound = false;
     this.completed = false;
-};
+}
 
 // Adds a new node to the node array
 dTree.prototype.add = function(id, pid, name, url, title, target, icon, iconOpen, open) {
@@ -337,7 +337,7 @@ if (!Array.prototype.push) {
             this[this.length]=arguments[i];
         return this.length;
     }
-};
+}
 
 if (!Array.prototype.pop) {
     Array.prototype.pop = function array_pop() {
@@ -345,4 +345,4 @@ if (!Array.prototype.pop) {
         this.length = Math.max(this.length-1,0);
         return lastElement;
     }
-};
+}

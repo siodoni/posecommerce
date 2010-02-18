@@ -8,7 +8,7 @@
                     session.setAttribute("UsuarioLogado", usuario.getUsuario());
                 } else {
 %>
-<script type="text/javascript">alert("Usuário ou Senha Inválido!")</script>
+<script type="text/javascript">alert("Usuário ou senha inválida!")</script>
 <%                                    }
             }
 
@@ -24,7 +24,7 @@
     <h2>Senha:<input type="password" name="txtSenha"/> </h2>
     <input type="submit" value="login" />
 </form>
-<%        } else {
+<%          } else {
 %>
 <form action="index.jsp" method="post">
     <h1>Área Administrativa [
@@ -33,12 +33,17 @@
         %>
         ] <input type="submit" name ="sair" value="sair"/></h1>
 </form>
-<hr/>
-<a href="link1">Menu1</a><br/>
-<a href="link1">Menu2</a><br/>
-<a href="link1">Menu3</a><br/>
-<a href="link1">Menu4</a><br/>
-<hr/>
 <%
+                //Testando a permissão do usuário
+                //Verificar o momento que deverá ser feita essa checagem...
+                if (usuario.getTpPermissao(usuario.getUsuario()).equals("admin")) {
+%>
+<hr/>
+<a href="link1">Menu 1</a><br/>
+<a href="link1">Menu 2</a><br/>
+<a href="link1">Menu 3</a><br/>
+<a href="link1">Menu 4</a><br/>
+<hr/>
+<%              }
             }
 %>
