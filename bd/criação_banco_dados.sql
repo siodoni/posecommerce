@@ -22,12 +22,15 @@ drop table estoque          cascade constraints;
 create table USUARIO
 (ID_USUARIO  NUMBER       not null,
  USUARIO     VARCHAR2(20) not null,
- SENHA       VARCHAR2(20) not null);
+ SENHA       VARCHAR2(20) not null,
+ PERMISSAO   VARCHAR2(20) default 'user' not null);
 comment on column USUARIO.ID_USUARIO is 'Identificador do usuario.';
 comment on column USUARIO.USUARIO    is 'Nome do Usuario.';
 comment on column USUARIO.SENHA      is 'Senha do Usuario.';
-alter table USUARIO add constraint PKUSUARIO primary key (ID_USUARIO) using index;
-alter table USUARIO add constraint UNUSUARIO unique      (USUARIO)    using index;
+comment on column USUARIO.PERMISSAO  is 'Permissão do Usuario.';
+alter table USUARIO add constraint PKUSUARIO           primary key (ID_USUARIO) using index;
+alter table USUARIO add constraint UNUSUARIO           unique      (USUARIO)    using index;
+alter table USUARIO add constraint CKUSUARIO_PERMISSAO check       (PERMISSAO IN ('admin','user'));
 --
 create table COR
 (ID_COR      NUMBER       not null,
@@ -65,8 +68,8 @@ alter table SUB_DEPARTAMENTO add constraint PKSUB_DEPARTAMENTO primary key (ID_S
 alter table SUB_DEPARTAMENTO add constraint UNSUB_DEPARTAMENTO unique      (DESCRICAO)           using index;
 --
 create table MODELO
-(ID_MODELO NUMBER not null,
- MARCA     NUMBER not null,
+(ID_MODELO NUMBER       not null,
+ MARCA     NUMBER       not null,
  DESCRICAO VARCHAR2(60) not null);
 comment on column MODELO.ID_MODELO is 'Identificador do modelo.';
 comment on column MODELO.MARCA     is 'Identificador da marca.';
@@ -81,9 +84,6 @@ create table PRODUTO
  DEPARTAMENTO     NUMBER        not null,
  SUB_DEPARTAMENTO NUMBER        not null,
  MODELO           NUMBER        not null,
--- QUANTIDADE       NUMBER(12,2)  not null,
--- UNIDADE          VARCHAR2(3)   not null,
--- PRECO_UNIT       NUMBER(12,2)  not null,
  COR              NUMBER,
  IMAGEM           VARCHAR2(200));
 comment on column PRODUTO.ID_PRODUTO       is 'Identificador do produto.';
@@ -91,9 +91,6 @@ comment on column PRODUTO.DESCRICAO        is 'Descrição do produto.';
 comment on column PRODUTO.DEPARTAMENTO     is 'Identificador do departamento.';
 comment on column PRODUTO.SUB_DEPARTAMENTO is 'Identificador do sub-departamento.';
 comment on column PRODUTO.MODELO           is 'Identificador do modelo.';
---comment on column PRODUTO.QUANTIDADE       is 'Quantidade.';
---comment on column PRODUTO.UNIDADE          is 'Unidade de medida.';
---comment on column PRODUTO.PRECO_UNIT       is 'Preço unitário do produto.';
 comment on column PRODUTO.COR              is 'Identificador da cor.';
 comment on column PRODUTO.IMAGEM           is 'Endereço da imagem do produto.';
 alter table PRODUTO add constraint PKPRODUTO                  primary key (ID_PRODUTO)        using index;
@@ -103,9 +100,9 @@ alter table PRODUTO add constraint FKPRODUTO_SUB_DEPARTAMENTO foreign key (SUB_D
 alter table PRODUTO add constraint FKPRODUTO_MODELO           foreign key (MODELO)            references MODELO           (ID_MODELO);
 --
 create table ESTOQUE
-(ID_ESTOQUE NUMBER not null,
- PRODUTO    NUMBER not null,
- DT_AQUIS   DATE not null,
+(ID_ESTOQUE NUMBER       not null,
+ PRODUTO    NUMBER       not null,
+ DT_AQUIS   DATE         not null,
  VLR_AQUIS  NUMBER(12,2) not null,
  QTDE_AQUIS NUMBER(12,2) not null,
  QTDE_DISP  NUMBER(12,2) not null,
@@ -117,8 +114,12 @@ comment on column ESTOQUE.VLR_AQUIS  is 'Valor de aquisição do produto.';
 comment on column ESTOQUE.QTDE_AQUIS is 'Quantidade de aquisição do produto.';
 comment on column ESTOQUE.QTDE_DISP  is 'Identifica a quantidade disponivel em estoque.';
 comment on column ESTOQUE.VLR_VENDA  is 'Valor de venda do produto (valor que será mostrado ao cliente).';
-alter table ESTOQUE add constraint PKESTOQUE         primary key (ID_ESTOQUE) using index;
-alter table ESTOQUE add constraint FKESTOQUE_PRODUTO foreign key (PRODUTO)    references PRODUTO (ID_PRODUTO);
+alter table ESTOQUE add constraint PKESTOQUE            primary key (ID_ESTOQUE) using index;
+alter table ESTOQUE add constraint FKESTOQUE_PRODUTO    foreign key (PRODUTO)    references PRODUTO (ID_PRODUTO);
+alter table ESTOQUE add constraint CKESTOQUE_QTDE_AQUIS check       (QTDE_AQUIS >= 0);
+alter table ESTOQUE add constraint CKESTOQUE_QTDE_DISP  check       (QTDE_DISP >= 0);
+alter table ESTOQUE add constraint CKESTOQUE_VLR_AQUIS  check       (VLR_AQUIS >= 0);
+alter table ESTOQUE add constraint CKESTOQUE_VLR_VENDA  check       (VLR_VENDA >= 0);
 --
 create or replace package pECommerce is
 --
@@ -221,7 +222,9 @@ create or replace package body pECommerce is
   function fRetornaTabelaCorHtml return clob is
     --
     cursor cCor is
-      select *
+      select a.id_cor,
+             a.descricao,
+             a.codigo_html
         from cor a
        order by a.descricao;
     --
@@ -338,8 +341,8 @@ create or replace trigger tmarca_b_iud_r
       on marca
   for each row
 begin
-  if   inserting
-  and  :new.id_marca is null
+  if inserting
+  and :new.id_marca is null
   then :new.id_marca := pECommerce.fRetornaSequence('SMARCA','N');
   end if;
 end tmarca_b_iud_r;
@@ -352,8 +355,8 @@ create or replace trigger tmodelo_b_iud_r
       on modelo
   for each row
 begin
-  if   inserting
-  and  :new.id_modelo is null  
+  if inserting
+  and :new.id_modelo is null  
   then :new.id_modelo := pECommerce.fRetornaSequence('SMODELO','N');
   end if;
 end tmodelo_b_iud_r;
@@ -367,7 +370,7 @@ create or replace trigger tdepartamento_b_iud_r
   for each row
 begin
   if inserting
-  and  :new.id_departamento is null
+  and :new.id_departamento is null
   then :new.id_departamento := pECommerce.fRetornaSequence('SDEPARTAMENTO','N');
   end if;
 end tdepartamento_b_iud_r;
@@ -381,7 +384,7 @@ create or replace trigger tsub_departamento_b_iud_r
   for each row
 begin
   if inserting
-  and  :new.id_departamento is null
+  and :new.id_departamento is null
   then :new.id_departamento := pECommerce.fRetornaSequence('SSUBDEPARTAMENTO','N');
   end if;
 end tsub_departamento_b_iud_r;
@@ -395,7 +398,7 @@ create or replace trigger tproduto_b_iud_r
   for each row
 begin
   if inserting
-  and  :new.id_produto is null
+  and :new.id_produto is null
   then :new.id_produto := pECommerce.fRetornaSequence('SPRODUTO','N');
   end if;
 end tproduto_b_iud_r;
@@ -409,11 +412,12 @@ create or replace trigger tcor_b_iud_r
   for each row
 begin
   if inserting
-  and  :new.id_cor is null
+  and :new.id_cor is null
   then :new.id_cor := pECommerce.fRetornaSequence('SCOR','N');
   end if;
 end tcor_b_iud_r;
 /
+--
 create or replace trigger tusuario_b_iud_r
   before insert
       or update
@@ -421,12 +425,18 @@ create or replace trigger tusuario_b_iud_r
       on usuario
   for each row
 begin
-  if   inserting
-  and  :new.id_usuario is null
+  if inserting
+  and :new.id_usuario is null
   then :new.id_usuario := pECommerce.fRetornaSequence('SUSUARIO','N');
+  end if;
+  --
+  if inserting
+  or updating
+  then :new.permissao := lower(:new.permissao);
   end if;
 end tusuario_b_iud_r;
 /
+--
 create or replace trigger testoque_b_iud_r
   before insert
       or update
@@ -434,16 +444,23 @@ create or replace trigger testoque_b_iud_r
       on estoque
   for each row
 begin
-  if   inserting
-  and  :new.id_estoque is null
+  if inserting
+  and :new.id_estoque is null
   then :new.id_estoque := pECommerce.fRetornaSequence('SESTOQUE','N');
   end if;
 end testoque_b_iud_r;
 /
 --
 begin
-  insert into usuario (usuario, senha)
-  values ('admin', 123);
+  insert into usuario (usuario, senha, permissao)
+  values ('admin', 'admin', 'admin');
+  --
+  insert into usuario (usuario, senha, permissao)
+  values ('ely', 'ely', 'user');
+  --
+  insert into usuario (usuario, senha, permissao)
+  values ('flavio', 'flavio', 'user');
+  --
   commit;
   --
   insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
