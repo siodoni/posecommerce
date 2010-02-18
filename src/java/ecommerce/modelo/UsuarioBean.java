@@ -7,19 +7,28 @@ import java.sql.ResultSet;
 
 public class UsuarioBean {
 
-    private int codigo;
+    private int idUSuario;
     private String usuario;
     private String senha;
+    private String permissao;
 
     public UsuarioBean() {
     }
 
-    public int getCodigo() {
-        return codigo;
+    public int getIdUSuario() {
+        return idUSuario;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
+    public void setIdUSuario(int idUSuario) {
+        this.idUSuario = idUSuario;
+    }
+
+    public String getPermissao() {
+        return permissao;
+    }
+
+    public void setPermissao(String permissao) {
+        this.permissao = permissao;
     }
 
     public String getSenha() {
@@ -67,5 +76,33 @@ public class UsuarioBean {
             System.out.println("Erro! " + e.getMessage());
         }
         return acesso;
+    }
+
+    public String getTpPermissao(String usuario) {
+        String tpPermissao = "user";
+
+        try {
+            Connection conn;
+            Conexao conecta;
+
+            conecta = new Conexao();
+            conn = conecta.metodoConecta();
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "  select permissao "
+                    + "  from usuario "
+                    + " where usuario = ? ");
+            ps.setString(1, this.getUsuario());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                tpPermissao = rs.getString(1);
+            }
+            conn.close();
+
+        } catch (Exception e) {
+            System.out.println("Erro! " + e.getMessage());
+        }
+        return tpPermissao;
     }
 }

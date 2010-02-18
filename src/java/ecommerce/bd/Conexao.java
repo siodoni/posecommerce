@@ -37,8 +37,8 @@ public class Conexao {
         props.put("password", "123");
         //props.put("user", "loja");
         //props.put("password", "loja");
-        //props.put("user", "desenv");
-        //props.put("password", "desenv");
+        //props.put("user", "temp");
+        //props.put("password", "temp");
         conn = DriverManager.getConnection(Conexao.url, props);
         return conn;
     }
