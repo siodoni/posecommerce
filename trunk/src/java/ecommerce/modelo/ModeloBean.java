@@ -5,10 +5,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class MarcaBean {
+public class ModeloBean {
 
-    private int idMarca;
+    private int idModelo;
     private String descricao;
+    private int marca;
 
     public String getDescricao() {
         return descricao;
@@ -18,15 +19,23 @@ public class MarcaBean {
         this.descricao = descricao;
     }
 
-    public int getIdMarca() {
-        return idMarca;
+    public int getMarca() {
+        return marca;
     }
 
-    public void setIdMarca(int idMarca) {
-        this.idMarca = idMarca;
+    public void setMarca(int marca) {
+        this.marca = marca;
     }
 
-    public void listarMarca(int idMarca) {
+    public int getIdModelo() {
+        return idModelo;
+    }
+
+    public void setIdModelo(int idModelo) {
+        this.idModelo = idModelo;
+    }
+
+    public void listarModelo(int idModelo) {
         try {
             Connection conn;
             Conexao conecta;
@@ -34,17 +43,18 @@ public class MarcaBean {
             conn = conecta.metodoConecta();
 
             String sql =
-                    " select id_marca, "
-                    + "      descricao "
-                    + " from marca "
-                    + "where id_marca = ?";
+                    " select id_modelo, "
+                    + "      descricao,marca "
+                    + " from modelo "
+                    + "where id_modelo = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idMarca);
+            ps.setInt(1, idModelo);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                setIdMarca(rs.getInt(1));
+                setIdModelo(rs.getInt(1));
                 setDescricao(rs.getString(2));
+                setMarca(rs.getInt(3));
             }
 
             rs.close();
@@ -56,20 +66,21 @@ public class MarcaBean {
         }
     }
 
-    public void alterarMarca() {
+    public void alterarModelo() {
         try {
 
             String sql = "";
 
-            if (getIdMarca() != 0) {
-                sql = "    update marca "
-                        + "   set descricao = ?"
-                        + " where id_marca = ?";
+            if (getIdModelo() != 0) {
+                sql = "    update modelo "
+                        + " set descricao = ?,"
+                        + " marca = ?"
+                        + " where id_modelo = ?";
             } else {
-                sql = "    insert into marca "
-                        + "  (descricao)"
+                sql = "    insert into modelo "
+                        + "  (descricao,marca)"
                         + "values"
-                        + "  (?)";
+                        + "  (?,?)";
             }
 
             Connection conn;
@@ -79,8 +90,9 @@ public class MarcaBean {
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, getDescricao());
-            if (getIdMarca() != 0) {
-                ps.setInt(2, getIdMarca());
+            ps.setInt(2, getMarca());
+            if (getIdModelo() != 0) {
+                ps.setInt(3, getIdModelo());
             }
             ps.executeUpdate();
 
@@ -92,9 +104,9 @@ public class MarcaBean {
         }
     }
 
-    public void excluirMarca(int idMarca) {
+    public void excluirModelo(int idModelo) {
         try {
-            String sql = "delete from marca where id_marca = ?";
+            String sql = "delete from modelo where id_modelo = ?";
 
             Connection conn;
             Conexao conecta;
@@ -102,7 +114,7 @@ public class MarcaBean {
             conn = conecta.metodoConecta();
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idMarca);
+            ps.setInt(1, idModelo);
             ps.executeUpdate();
 
             ps.close();
