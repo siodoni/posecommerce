@@ -78,7 +78,17 @@
 
    </td>
    <td rowspan="2"><img name="layoutecommerce_r4_c12" src="img/layout-ecommerce_r4_c12.png" width="15" height="41" border="0" id="layoutecommerce_r4_c12" alt="" /></td>
-   <td colspan="2" rowspan="2" background="img/topo_botao2.png">oi2</td>
+   <td colspan="2" rowspan="2" background="img/topo_botao2.png" class="login">
+       <center>
+       <%
+            if (session.getAttribute("UsuarioLogado")!=null) {
+                out.print("<a href='pedido.jsp'>Meu Pedido</a>");
+            } else {
+                out.print("Meu Pedido");
+            }
+        %>
+        </center>
+   </td>
    <td rowspan="2"><img name="layoutecommerce_r4_c15" src="img/layout-ecommerce_r4_c15.png" width="16" height="41" border="0" id="layoutecommerce_r4_c15" alt="" /></td>
    <td><img src="img/spacer.gif" width="1" height="20" border="0" alt="" /></td>
   </tr>

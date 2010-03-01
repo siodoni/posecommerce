@@ -10,8 +10,10 @@
 
     <hr/>
     <a href="listamarca.jsp">Cadastro de Marcas</a><br/>
-    <a href="link1">Menu 2</a><br/>
-    <a href="link1">Menu 3</a><br/>
+    <a href="listadepartamento.jsp">Cadastro de Departamentos</a><br/>
+    <a href="listasub_departamento.jsp">Cadastro de Sub-Departamentos</a><br/>
+    <a href="listamodelo.jsp">Cadastro de Modelos</a><br/>
+    <a href="listaprod.jsp">Cadastro de Produtos</a><br/>
     <a href="index.jsp">Sair</a><br/>
     <hr/>
 
