@@ -12,3 +12,33 @@ body {
 hr{
     line-height: 1px;
 }
+.login {
+    font-size: 9px;
+}
+
+table{
+    border-style: solid;
+    border-width: 0px;
+    border-spacing: 0px;
+}
+
+td{
+    font-size: small;
+}
+
+td.titulo{
+    background-color: #003055;
+    color: white;
+    font-weight: bold;
+}
+
+td.par{
+    background-color: #DDF0FF;
+}
+
+td.impar{
+    background-color: white;
+}
+h1 {
+    font-size: 14px;
+}

@@ -78,7 +78,7 @@ public class UsuarioBean {
         return acesso;
     }
 
-    public String getTpPermissao(String usuario) {
+    public String getTpPermissao() {
         String tpPermissao = "user";
 
         try {
