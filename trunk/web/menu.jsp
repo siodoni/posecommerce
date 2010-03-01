@@ -37,7 +37,7 @@
                     <%
                                 out.println("<script type='text/javascript'>");
                                 out.println("d = new dTree('d');");
-                                out.println("d.config.target = 'FrameMain';");
+                                //out.println("d.config.target = 'FrameMain';");
                                 out.println("d.add(0,-1,'Menu','index.jsp');");
 
                                 //Só aparece no menu produtos com quantidade
@@ -123,7 +123,12 @@
                                 clst.close();
                                 conn.close();
 
-                                out.println("d.add(999999,0,'Area Administrativa','adm/index.jsp');");
+                                
+                                if (session.getAttribute("UsuarioPermissao")!=null) {
+                                    if (session.getAttribute("UsuarioPermissao").equals("admin")) {
+                                        out.println("d.add(999999,0,'Area Administrativa','indexadmin.jsp');");
+                                    }
+                                }
 
                                 out.println("document.write(d)");
                                 out.println("</script>");
@@ -131,6 +136,7 @@
                 </td>
             </tr>
         </table>
+
 
                 </td>
    <td><img name="categorias_dir" src="img/categorias_dir.png" width="7" height="3" border="0" id="categorias_dir" alt="" /></td>

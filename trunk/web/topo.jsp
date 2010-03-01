@@ -1,3 +1,4 @@
+           <link rel="StyleSheet" href="css/geral.css" type="text/css">
 
 <table width="700" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
@@ -40,9 +41,44 @@
    <td><img src="img/spacer.gif" width="1" height="9" border="0" alt="" /></td>
   </tr>
   <tr>
-   <td rowspan="2" background="img/topo_botao1.png">&nbsp;</td>
+   <td rowspan="2" background="img/topo_botao1.png">
+       <form action="login.jsp" method="post">
+       <table width="100%" border="0" cellpadding="0" cellspacing="0">
+<%
+            if (session.getAttribute("UsuarioLogado") == null) {
+%>
+           <tr>
+               <td class="login">Login:</td>
+               <td><input name="txtUsuario" type="text" size="18" value="" class="login" /></td>
+           </tr>
+           <tr>
+               <td class="login">Senha:</td>
+               <td><input name="txtSenha" type="password" size="8" value="" class="login" />
+                   <input type="submit" value="Ok" name="login" class="login"/>
+               </td>
+           </tr>
+
+
+
+<%          } else {
+%>
+<tr><td  class="login"><strong>Usuário: </strong>
+<%= session.getAttribute("UsuarioLogado") %>
+</td>
+<td>
+        <input type="submit" name ="sair" value="sair"  class="login"/>
+</td></tr>
+<%
+            }
+%>
+
+
+       </table>
+       </form>
+
+   </td>
    <td rowspan="2"><img name="layoutecommerce_r4_c12" src="img/layout-ecommerce_r4_c12.png" width="15" height="41" border="0" id="layoutecommerce_r4_c12" alt="" /></td>
-   <td colspan="2" rowspan="2" background="img/topo_botao2.png">&nbsp;</td>
+   <td colspan="2" rowspan="2" background="img/topo_botao2.png">oi2</td>
    <td rowspan="2"><img name="layoutecommerce_r4_c15" src="img/layout-ecommerce_r4_c15.png" width="16" height="41" border="0" id="layoutecommerce_r4_c15" alt="" /></td>
    <td><img src="img/spacer.gif" width="1" height="20" border="0" alt="" /></td>
   </tr>
