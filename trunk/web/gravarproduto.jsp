@@ -15,10 +15,9 @@
                     produto.setCor(Integer.parseInt(request.getParameter("pCor")));
                     produto.setImagem(request.getParameter("pImagem"));
                     produto.alterarProduto();
-
         %>
         <script language="javascript" type="text/javascript">
-            alert("Produto Gravada com Sucesso!");
+            alert("Produto gravado com sucesso!");
             document.location.href = "listaprod.jsp";
         </script>
     </body>

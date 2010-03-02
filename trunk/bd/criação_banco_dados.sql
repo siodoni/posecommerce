@@ -325,14 +325,14 @@ begin
 end;
 /
 --
-create sequence scor             minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
-create sequence smarca           minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
-create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 3 increment by 1 nocache;
-create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
-create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
-create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 8 increment by 1 nocache;
-create sequence susuario         minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
-create sequence sestoque         minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
+create sequence scor             minvalue 1 maxvalue 99999999999 start with 6 increment by 1 nocache;
+create sequence smarca           minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
+create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
+create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
+create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
+create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 9 increment by 1 nocache;
+create sequence susuario         minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
+create sequence sestoque         minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
 --
 create or replace trigger tmarca_b_iud_r
   before insert
@@ -380,12 +380,12 @@ create or replace trigger tsub_departamento_b_iud_r
   before insert
       or update
       or delete
-      on departamento
+      on sub_departamento
   for each row
 begin
   if inserting
-  and :new.id_departamento is null
-  then :new.id_departamento := pECommerce.fRetornaSequence('SSUBDEPARTAMENTO','N');
+  and :new.id_sub_departamento is null
+  then :new.id_sub_departamento := pECommerce.fRetornaSequence('SSUBDEPARTAMENTO','N');
   end if;
 end tsub_departamento_b_iud_r;
 /

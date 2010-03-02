@@ -8,7 +8,11 @@
     <body>
         <%
                     int idMarca = Integer.parseInt(request.getParameter("pMarca"));
-                    marca.excluirMarca(idMarca);
+                    try {
+                        marca.excluirMarca(idMarca);
+                    } catch (Exception e) {
+                        out.print(e.toString());
+                    }
         %>
         <script language="javascript" type="text/javascript">
             alert("Marca Excluída com Sucesso!");

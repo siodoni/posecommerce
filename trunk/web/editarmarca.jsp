@@ -1,19 +1,17 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="marca" scope="page" class="ecommerce.modelo.MarcaBean"/>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
     <head>
         <title>:::EF - Instrumentos musicais:::</title>
-           <link rel="StyleSheet" href="css/geral.css" type="text/css">
+        <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
     </head>
     <body>
-
-    <jsp:include page="topo.jsp"></jsp:include>
-
-    <%
-                int idMarca = Integer.parseInt(request.getParameter("pMarca"));
-                marca.listarMarca(idMarca);
-    %>
+        <jsp:include page="topo.jsp"></jsp:include>
+        <%
+                    int idMarca = Integer.parseInt(request.getParameter("pMarca"));
+                    marca.listarMarca(idMarca);
+        %>
         <h1 align="center">Editar Marca</h1>
         <br/>
         <form action="gravarmarca.jsp" method="post" name="frm">
@@ -27,7 +25,7 @@
                     </td>
                     <td>
                         <input value="<%
-                                    if (idMarca!= 0) {
+                                    if (idMarca != 0) {
                                         out.print(marca.getDescricao());
                                     }%>"
                                type="text" size="40" maxlength="40" name="pDescricao" id="pDescricao"/>
@@ -43,10 +41,7 @@
                 <a href="listamarca.jsp">Cancelar</a>
             </center>
         </form>
-
-
-    <jsp:include page="rodape.jsp"></jsp:include>
-
-</body>
+        <jsp:include page="rodape.jsp"></jsp:include>
+    </body>
 </html>
 

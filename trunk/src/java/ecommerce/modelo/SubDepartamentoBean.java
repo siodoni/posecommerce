@@ -5,9 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class Sub_departamentoBean {
+public class SubDepartamentoBean {
 
-    private int idSub_departamento;
+    private int idSubDepartamento;
     private String descricao;
 
     public String getDescricao() {
@@ -18,15 +18,15 @@ public class Sub_departamentoBean {
         this.descricao = descricao;
     }
 
-    public int getIdSub_departamento() {
-        return idSub_departamento;
+    public int getIdSubDepartamento() {
+        return idSubDepartamento;
     }
 
-    public void setIdSub_departamento(int idSub_departamento) {
-        this.idSub_departamento = idSub_departamento;
+    public void setIdSubDepartamento(int idSubDepartamento) {
+        this.idSubDepartamento = idSubDepartamento;
     }
 
-    public void listarSub_departamento(int idSub_departamento) {
+    public void listarSubDepartamento(int idSubDepartamento) {
         try {
             Connection conn;
             Conexao conecta;
@@ -39,11 +39,11 @@ public class Sub_departamentoBean {
                     + " from sub_departamento "
                     + "where id_sub_departamento = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idSub_departamento);
+            ps.setInt(1, idSubDepartamento);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                setIdSub_departamento(rs.getInt(1));
+                setIdSubDepartamento(rs.getInt(1));
                 setDescricao(rs.getString(2));
             }
 
@@ -56,12 +56,12 @@ public class Sub_departamentoBean {
         }
     }
 
-    public void alterarSub_departamento() {
+    public void alterarSubDepartamento() {
         try {
 
             String sql = "";
 
-            if (getIdSub_departamento() != 0) {
+            if (getIdSubDepartamento() != 0) {
                 sql = "    update sub_departamento "
                         + "   set descricao = ?"
                         + " where id_sub_departamento = ?";
@@ -79,8 +79,8 @@ public class Sub_departamentoBean {
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, getDescricao());
-            if (getIdSub_departamento() != 0) {
-                ps.setInt(2, getIdSub_departamento());
+            if (getIdSubDepartamento() != 0) {
+                ps.setInt(2, getIdSubDepartamento());
             }
             ps.executeUpdate();
 
@@ -92,7 +92,7 @@ public class Sub_departamentoBean {
         }
     }
 
-    public void excluirSub_departamento(int idSub_departamento) {
+    public void excluirSubDepartamento(int idSubDepartamento) {
         try {
             String sql = "delete from sub_departamento where id_sub_departamento = ?";
 
@@ -102,7 +102,7 @@ public class Sub_departamentoBean {
             conn = conecta.metodoConecta();
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idSub_departamento);
+            ps.setInt(1, idSubDepartamento);
             ps.executeUpdate();
 
             ps.close();

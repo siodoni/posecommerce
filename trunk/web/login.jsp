@@ -18,5 +18,5 @@
                 session.removeAttribute("UsuarioPermissao");
             }
 
-             response.sendRedirect("index.jsp");
+            response.sendRedirect("index.jsp");
 %>
