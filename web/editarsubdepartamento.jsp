@@ -1,22 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="departamento" scope="page" class="ecommerce.modelo.DepartamentoBean"/>
+<jsp:useBean id="subdepartamento" scope="page" class="ecommerce.modelo.SubDepartamentoBean"/>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
     <head>
         <title>:::EF - Instrumentos musicais:::</title>
         <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
     </head>
     <body>
+
         <jsp:include page="topo.jsp"></jsp:include>
+
         <%
-                    int idDepartamento = Integer.parseInt(request.getParameter("pDepartamento"));
-                    departamento.listarDepartamento(idDepartamento);
+                    int idSubDepartamento = Integer.parseInt(request.getParameter("pSubDepartamento"));
+                    subdepartamento.listarSubDepartamento(idSubDepartamento);
         %>
-        <h1 align="center">Editar Departamento</h1>
+        <h1 align="center">Editar Sub-departamento</h1>
         <br/>
-        <form action="gravardepartamento.jsp" method="post" name="frm">
-            <input value="<%out.print(departamento.getIdDepartamento());%>"
-                   type="hidden" name="pDepartamento" id="pDepartamento"/>
+        <form action="gravarsubdepartamento.jsp" method="post" name="frm">
+            <input value="<%out.print(subdepartamento.getIdSubDepartamento());%>"
+                   type="hidden" name="pSubDepartamento" id="pSubDepartamento"/>
             <table align="center">
                 <tr>
                     <td>
@@ -25,8 +27,8 @@
                     </td>
                     <td>
                         <input value="<%
-                                    if (idDepartamento != 0) {
-                                        out.print(departamento.getDescricao());
+                                    if (idSubDepartamento != 0) {
+                                        out.print(subdepartamento.getDescricao());
                                     }%>"
                                type="text" size="40" maxlength="40" name="pDescricao" id="pDescricao"/>
                         <br/>
@@ -38,10 +40,12 @@
             <center>
                 <a href="javascript:document.frm.submit();">Salvar</a>
                 <b>|</b>
-                <a href="listadepartamento.jsp">Cancelar</a>
+                <a href="listasubdepartamento.jsp">Cancelar</a>
             </center>
         </form>
+
         <jsp:include page="rodape.jsp"></jsp:include>
+
     </body>
 </html>
 

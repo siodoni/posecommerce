@@ -10,10 +10,9 @@
                     marca.setIdMarca(Integer.parseInt(request.getParameter("pMarca")));
                     marca.setDescricao(request.getParameter("pDescricao"));
                     marca.alterarMarca();
-
         %>
         <script language="javascript" type="text/javascript">
-            alert("Marca Gravada com Sucesso!");
+            alert("Marca gravada com sucesso!");
             document.location.href = "listamarca.jsp";
         </script>
     </body>

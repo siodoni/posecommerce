@@ -13,7 +13,7 @@
 
         %>
         <script language="javascript" type="text/javascript">
-            alert("Departamento Gravada com Sucesso!");
+            alert("Departamento gravado com sucesso!");
             document.location.href = "listadepartamento.jsp";
         </script>
     </body>

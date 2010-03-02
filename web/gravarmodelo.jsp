@@ -11,10 +11,9 @@
                     modelo.setDescricao(request.getParameter("pDescricao"));
                     modelo.setMarca(Integer.parseInt(request.getParameter("pMarca")));
                     modelo.alterarModelo();
-
         %>
         <script language="javascript" type="text/javascript">
-            alert("Modelo Gravada com Sucesso!");
+            alert("Modelo gravado com sucesso!");
             document.location.href = "listamodelo.jsp";
         </script>
     </body>

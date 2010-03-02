@@ -9,6 +9,14 @@ body {
     white-space: nowrap;
 }
 
+a{
+    color: #205B13;
+}
+
+img{
+    border: none;
+}
+
 hr{
     line-height: 1px;
 }
@@ -27,13 +35,13 @@ td{
 }
 
 td.titulo{
-    background-color: #003055;
+    background-color: #205B13;/*#003055*/;
     color: white;
     font-weight: bold;
 }
 
 td.par{
-    background-color: #DDF0FF;
+    background-color: #CFFAC6;/*#DDF0FF*/;
 }
 
 td.impar{

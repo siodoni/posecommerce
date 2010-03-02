@@ -1,24 +1,24 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="ecommerce.bd.*, java.sql.*"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
     <head>
         <title>:::EF - Instrumentos musicais:::</title>
         <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
-           
-    <script language="javascript" type="text/javascript">
-        function excluir(pSub_departamento) {
-            if (confirm("Confirma a exclusão do registro?")) {
-                document.location.href = "excluirsub_departamento.jsp?pSub_departamento=" + pSub_departamento;
+
+        <script language="javascript" type="text/javascript">
+            function excluir(pSubDepartamento) {
+                if (confirm("Confirma a exclusão do registro?")) {
+                    document.location.href = "excluirsubdepartamento.jsp?pSubDepartamento=" + pSubDepartamento;
+                }
             }
-        }
-    </script>
+        </script>
     </head>
     <body>
 
-    <jsp:include page="topo.jsp"></jsp:include>
+        <jsp:include page="topo.jsp"></jsp:include>
 
-        <h1 align="center">Cadastro de Sub_departamentos</h1>
+        <h1 align="center">Cadastro de Sub Departamentos</h1>
         <br/>
         <table width="80%" align="center">
             <tr>
@@ -59,7 +59,7 @@
                             out.println(rs.getString(1));
                             out.println("</td>");
                             out.println("<td class=\"" + css + "\" align=\"center\">");
-                            out.println("<a href=\"editarsub_departamento.jsp?pSub_departamento=" + rs.getInt(2) + "\"><img src=\"img/editar.png\" alt=\"editar\"/></a>");
+                            out.println("<a href=\"editarsubdepartamento.jsp?pSubDepartamento=" + rs.getInt(2) + "\"><img src=\"img/editar.png\" alt=\"editar\"/></a>");
                             out.println("</td>");
                             out.println("<td class=\"" + css + "\" align=\"center\">");
                             out.println("<a href=\"javascript:excluir(" + rs.getInt(2) + ");\"><img src=\"img/excluir.gif\" alt=\"excluir\"/></a>");
@@ -74,12 +74,12 @@
         </table>
         <br/>
         <center>
-            <a href="editarsub_departamento.jsp?pSub_departamento=0">Incluir</a>
-            <a href="indexadmin.jsp">Voltar</a>
+            <a href="editarsubdepartamento.jsp?pSubDepartamento=0">Incluir</a>
+            <a href="index.jsp">Voltar</a>
         </center>
 
         <jsp:include page="rodape.jsp"></jsp:include>
 
-</body>
+    </body>
 </html>
 
