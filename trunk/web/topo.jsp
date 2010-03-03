@@ -1,4 +1,3 @@
-<link rel="StyleSheet" href="css/geral.css" type="text/css">
 <table width="700" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
         <td><img src="img/spacer.gif" width="3" height="1" border="0" alt="" /></td>
@@ -44,7 +43,11 @@
             <img name="layoutecommerce_r2_c10" src="img/layout-ecommerce_r2_c10.png" width="9" height="98" border="0" id="layoutecommerce_r2_c10" alt="" />
         </td>
         <td colspan="3" bgcolor="#6CAA00">
-            &nbsp;
+            <form action="index.jsp" method="post">
+                Pesquisa:
+                <input name="pRestricao" id="pRestricao" type="text" value="" size="30" class="pesquisa"/>
+                <input type="submit" value="Ok" name="login" class="pesquisa"/>
+            </form>
         </td>
         <td colspan="2">
             <img name="layoutecommerce_r2_c14" src="img/layout-ecommerce_r2_c14.png" width="19" height="48" border="0" id="layoutecommerce_r2_c14" alt="" />
@@ -65,7 +68,7 @@
         </td>
     </tr>
     <tr>
-        <td rowspan="2" background="img/topo_botao1.png">
+        <td rowspan="2" style="background-image: url(img/topo_botao1.png);">
             <form action="login.jsp" method="post">
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <%
@@ -73,11 +76,14 @@
                     %>
                     <tr>
                         <td class="login">Login:</td>
-                        <td><input name="txtUsuario" type="text" size="18" value="" class="login" /></td>
+                        <td>
+                            <input name="txtUsuario" type="text" size="18" value="" class="login" />
+                        </td>
                     </tr>
                     <tr>
                         <td class="login">Senha:</td>
-                        <td><input name="txtSenha" type="password" size="8" value="" class="login" />
+                        <td>
+                            <input name="txtSenha" type="password" size="8" value="" class="login"/>
                             <input type="submit" value="Ok" name="login" class="login"/>
                         </td>
                     </tr>
@@ -96,13 +102,13 @@
             </form>
         </td>
         <td rowspan="2"><img name="layoutecommerce_r4_c12" src="img/layout-ecommerce_r4_c12.png" width="15" height="41" border="0" id="layoutecommerce_r4_c12" alt="" /></td>
-        <td colspan="2" rowspan="2" background="img/topo_botao2.png" class="login">
+        <td colspan="2" rowspan="2" style="background-image: url(img/topo_botao2.png);" class="login">
             <center>
                 <%
                             if (session.getAttribute("UsuarioLogado") != null) {
                                 out.print("<a href='pedido.jsp'>Meu Pedido</a>");
                             } else {
-                                out.print("Meu Pedido");
+                                out.print("");
                             }
                 %>
             </center>

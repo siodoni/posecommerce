@@ -12,6 +12,14 @@
                     String tableAnt = "", localAnt = "";
                     String produto = request.getParameter("pProduto");
                     String nivel = request.getParameter("pNivel");
+                    boolean usuarioLogado = false;
+
+                    if (session.getAttribute("UsuarioPermissao") != null) {
+                        usuarioLogado = true;
+                    } else {
+                        usuarioLogado = false;
+                    }
+
                     String sql =
                             "  select '<tr><td colspan=2><img src=''img/' || nvl(a.imagem, 'sem_foto.png') || "
                             + "       '''/></td></tr>' imagem, "
@@ -68,6 +76,7 @@
                             + "   and e.id_departamento     = a.departamento "
                             + "   and f.id_sub_departamento = a.sub_departamento"
                             + " order by a.departamento, a.sub_departamento, b.marca, a.modelo, a.id_produto ";
+
                     Connection conn;
                     ResultSet rs;
                     Conexao conecta;
@@ -105,7 +114,17 @@
                         out.println(rs.getString(4));
                         out.println(rs.getString(5));
                         out.println(rs.getString(6));
+
+                        if (usuarioLogado) {
+                            out.println("<tr>");
+                            out.println("<form action=\"pedido.jsp\" method=\"post\">");
+                            out.println("<td>Qtd.<input id=\"pQtde\" type=\"text\" size=\"3\" maxlength=\"3\" value=\"1\" /></td>");
+                            out.println("<td><input type=\"submit\" class=\"comprar\" value=\"Comprar\"/></td>");
+                            out.println("</form>");
+                            out.println("</tr>");
+                        }
                         out.println(rs.getString(7));
+
 
                         tableAnt = "<table>";
                         localAnt = rs.getString(8) + "<br/><br/>";

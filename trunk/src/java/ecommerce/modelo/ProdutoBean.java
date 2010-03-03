@@ -155,24 +155,19 @@ public class ProdutoBean {
         }
     }
 
-    public void excluirProduto(int idProduto) {
-        try {
-            String sql = "delete from produto where id_produto = ?";
+    public void excluirProduto(int idProduto) throws Exception {
+        String sql = "delete from produto where id_produto = ?";
 
-            Connection conn;
-            Conexao conecta;
-            conecta = new Conexao();
-            conn = conecta.metodoConecta();
+        Connection conn;
+        Conexao conecta;
+        conecta = new Conexao();
+        conn = conecta.metodoConecta();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idProduto);
-            ps.executeUpdate();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idProduto);
+        ps.executeUpdate();
 
-            ps.close();
-            conn.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ps.close();
+        conn.close();
     }
 }

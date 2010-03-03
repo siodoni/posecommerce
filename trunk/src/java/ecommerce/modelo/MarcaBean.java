@@ -92,24 +92,19 @@ public class MarcaBean {
         }
     }
 
-    public void excluirMarca(int idMarca) {
-        try {
-            String sql = "delete from marca where id_marca = ?";
+    public void excluirMarca(int idMarca) throws Exception {
+        String sql = "delete from marca where id_marca = ?";
 
-            Connection conn;
-            Conexao conecta;
-            conecta = new Conexao();
-            conn = conecta.metodoConecta();
+        Connection conn;
+        Conexao conecta;
+        conecta = new Conexao();
+        conn = conecta.metodoConecta();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idMarca);
-            ps.executeUpdate();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idMarca);
+        ps.executeUpdate();
 
-            ps.close();
-            conn.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ps.close();
+        conn.close();
     }
 }

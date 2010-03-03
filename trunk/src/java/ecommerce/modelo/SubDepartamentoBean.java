@@ -92,24 +92,19 @@ public class SubDepartamentoBean {
         }
     }
 
-    public void excluirSubDepartamento(int idSubDepartamento) {
-        try {
-            String sql = "delete from sub_departamento where id_sub_departamento = ?";
+    public void excluirSubDepartamento(int idSubDepartamento) throws Exception {
+        String sql = "delete from sub_departamento where id_sub_departamento = ?";
 
-            Connection conn;
-            Conexao conecta;
-            conecta = new Conexao();
-            conn = conecta.metodoConecta();
+        Connection conn;
+        Conexao conecta;
+        conecta = new Conexao();
+        conn = conecta.metodoConecta();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idSubDepartamento);
-            ps.executeUpdate();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idSubDepartamento);
+        ps.executeUpdate();
 
-            ps.close();
-            conn.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ps.close();
+        conn.close();
     }
 }
