@@ -5,7 +5,6 @@
     <head>
         <title>:::EF - Instrumentos musicais:::</title>
         <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
-
         <script language="javascript" type="text/javascript">
             function excluir(pDepartamento) {
                 if (confirm("Confirma a exclusão do registro?")) {
@@ -15,14 +14,12 @@
         </script>
     </head>
     <body>
-
         <jsp:include page="topo.jsp"></jsp:include>
-
         <h1 align="center">Cadastro de Departamentos</h1>
         <br/>
         <table width="80%" align="center">
             <tr>
-                <td width="80%" class="titulo">Descrição</td>
+                <td class="titulo">Descrição</td>
                 <td width="10%" class="titulo" align="center">Alterar</td>
                 <td width="10%" class="titulo" align="center">Excluir</td>
             </tr>
@@ -75,11 +72,10 @@
         <br/>
         <center>
             <a href="editardepartamento.jsp?pDepartamento=0">Incluir</a>
+            &nbsp;|&nbsp;
             <a href="index.jsp">Voltar</a>
         </center>
-
         <jsp:include page="rodape.jsp"></jsp:include>
-
     </body>
 </html>
 

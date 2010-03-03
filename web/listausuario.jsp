@@ -6,21 +6,22 @@
         <title>:::EF - Instrumentos musicais:::</title>
         <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
         <script language="javascript" type="text/javascript">
-            function excluir(pModelo) {
+            function excluir(pUsuario) {
                 if (confirm("Confirma a exclusão do registro?")) {
-                    document.location.href = "excluirmodelo.jsp?pModelo=" + pModelo;
+                    document.location.href = "excluirusuario.jsp?pIdUsuario=" + pUsuario;
                 }
             }
         </script>
     </head>
     <body>
         <jsp:include page="topo.jsp"></jsp:include>
-        <h1 align="center">Cadastro de Modelos</h1>
+        <h1 align="center">Cadastro de Usuários</h1>
         <br/>
         <table width="80%" align="center">
             <tr>
-                <td class="titulo">Descrição</td>
-                <td class="titulo">Marca</td>
+                <td class="titulo">Nome</td>
+                <td class="titulo">Usuario</td>
+                <td class="titulo">Permissão</td>
                 <td width="10%" class="titulo" align="center">Alterar</td>
                 <td width="10%" class="titulo" align="center">Excluir</td>
             </tr>
@@ -29,9 +30,16 @@
                         int cont = 0;
 
                         String sql =
-                                "select modelo.descricao, modelo.id_modelo, marca.descricao as marca "
-                                + " from modelo inner join marca on marca.id_marca = modelo.marca"
-                                + " order by descricao";
+                                "  select a.nome, "
+                                + "       a.usuario, "
+                                + "       case when a.permissao = 'user' "
+                                + "            then 'Cliente' "
+                                + "            when a.permissao =  'admin' "
+                                + "            then 'Administrador' "
+                                + "       end permissao,"
+                                + "       a.id_usuario "
+                                + "  from usuario a "
+                                + " order by a.nome ";
                         Connection conn;
                         ResultSet rs;
                         Conexao conecta;
@@ -56,13 +64,16 @@
                             out.println(rs.getString(1));
                             out.println("</td>");
                             out.println("<td class=\"" + css + "\">");
+                            out.println(rs.getString(2));
+                            out.println("</td>");
+                            out.println("<td class=\"" + css + "\">");
                             out.println(rs.getString(3));
                             out.println("</td>");
                             out.println("<td class=\"" + css + "\" align=\"center\">");
-                            out.println("<a href=\"editarmodelo.jsp?pModelo=" + rs.getInt(2) + "\"><img src=\"img/editar.png\" alt=\"editar\"/></a>");
+                            out.println("<a href=\"editarusuario.jsp?pIdUsuario=" + rs.getInt(4) + "\"><img src=\"img/editar.png\" alt=\"editar\"/></a>");
                             out.println("</td>");
                             out.println("<td class=\"" + css + "\" align=\"center\">");
-                            out.println("<a href=\"javascript:excluir(" + rs.getInt(2) + ");\"><img src=\"img/excluir.gif\" alt=\"excluir\"/></a>");
+                            out.println("<a href=\"javascript:excluir(" + rs.getInt(4) + ");\"><img src=\"img/excluir.gif\" alt=\"excluir\"/></a>");
                             out.println("</td>");
                             out.println("</tr>");
                         }
@@ -74,7 +85,7 @@
         </table>
         <br/>
         <center>
-            <a href="editarmodelo.jsp?pModelo=0">Incluir</a>
+            <a href="editarusuario.jsp?pIdUsuario=0">Incluir</a>
             &nbsp;|&nbsp;
             <a href="index.jsp">Voltar</a>
         </center>

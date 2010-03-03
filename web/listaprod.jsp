@@ -5,7 +5,6 @@
     <head>
         <title>:::EF - Instrumentos musicais:::</title>
         <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
-
         <script language="javascript" type="text/javascript">
             function excluir(pProduto) {
                 if (confirm("Confirma a exclusão do registro?")) {
@@ -15,19 +14,17 @@
         </script>
     </head>
     <body>
-
         <jsp:include page="topo.jsp"></jsp:include>
-
         <h1 align="center">Cadastro de Produtos</h1>
         <br/>
         <table width="80%" align="center">
             <tr>
-                <td width="30%" class="titulo">Descrição</td>
-                <td width="20%" class="titulo">Departamento</td>
-                <td width="20%" class="titulo">Sub-departamento</td>
-                <td width="20%" class="titulo">Modelo</td>
-                <td width="20%" class="titulo">Cor</td>
-                <td width="20%" class="titulo">Imagem</td>
+                <td class="titulo">Descrição</td>
+                <td class="titulo">Departamento</td>
+                <td class="titulo">Sub Departamento</td>
+                <td class="titulo">Modelo</td>
+                <td class="titulo">Cor</td>
+                <td class="titulo">Imagem</td>
                 <td width="10%" class="titulo" align="center">Alterar</td>
                 <td width="10%" class="titulo" align="center">Excluir</td>
             </tr>
@@ -92,11 +89,10 @@
         <br/>
         <center>
             <a href="editarproduto.jsp?pProduto=0">Incluir</a>
+            &nbsp;|&nbsp;
             <a href="index.jsp">Voltar</a>
         </center>
-
         <jsp:include page="rodape.jsp"></jsp:include>
-
     </body>
 </html>
 

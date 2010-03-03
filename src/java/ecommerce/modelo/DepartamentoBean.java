@@ -92,24 +92,19 @@ public class DepartamentoBean {
         }
     }
 
-    public void excluirDepartamento(int idDepartamento) {
-        try {
-            String sql = "delete from departamento where id_departamento = ?";
+    public void excluirDepartamento(int idDepartamento) throws Exception {
+        String sql = "delete from departamento where id_departamento = ?";
 
-            Connection conn;
-            Conexao conecta;
-            conecta = new Conexao();
-            conn = conecta.metodoConecta();
+        Connection conn;
+        Conexao conecta;
+        conecta = new Conexao();
+        conn = conecta.metodoConecta();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idDepartamento);
-            ps.executeUpdate();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idDepartamento);
+        ps.executeUpdate();
 
-            ps.close();
-            conn.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ps.close();
+        conn.close();
     }
 }

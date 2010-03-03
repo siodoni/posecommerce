@@ -9,6 +9,8 @@ drop sequence ssubdepartamento;
 drop sequence sproduto;
 drop sequence susuario;
 drop sequence sestoque;
+drop sequence spedido;
+drop sequence spedidoitem;
 --
 drop table cor              cascade constraints;
 drop table marca            cascade constraints;
@@ -18,13 +20,17 @@ drop table modelo           cascade constraints;
 drop table produto          cascade constraints;
 drop table usuario          cascade constraints;
 drop table estoque          cascade constraints;
+drop table pedido           cascade constraints;
+drop table pedido_item      cascade constraints;
 --
 create table USUARIO
 (ID_USUARIO  NUMBER       not null,
+ NOME        VARCHAR2(60) not null,
  USUARIO     VARCHAR2(20) not null,
  SENHA       VARCHAR2(20) not null,
  PERMISSAO   VARCHAR2(20) default 'user' not null);
 comment on column USUARIO.ID_USUARIO is 'Identificador do usuario.';
+comment on column USUARIO.NOME       is 'Nome do usuário';
 comment on column USUARIO.USUARIO    is 'Nome do Usuario.';
 comment on column USUARIO.SENHA      is 'Senha do Usuario.';
 comment on column USUARIO.PERMISSAO  is 'Permissão do Usuario.';
@@ -121,6 +127,32 @@ alter table ESTOQUE add constraint CKESTOQUE_QTDE_DISP  check       (QTDE_DISP >
 alter table ESTOQUE add constraint CKESTOQUE_VLR_AQUIS  check       (VLR_AQUIS >= 0);
 alter table ESTOQUE add constraint CKESTOQUE_VLR_VENDA  check       (VLR_VENDA >= 0);
 --
+create table PEDIDO
+(ID_PEDIDO NUMBER not null,
+ DATA      DATE   default sysdate not null,
+ USUARIO   NUMBER not null);
+comment on column PEDIDO.ID_PEDIDO is 'Identificador do pedido';
+comment on column PEDIDO.DATA      is 'Data de geração do pedido.';
+comment on column PEDIDO.USUARIO   is 'Cliente do pedido.';
+alter table PEDIDO add constraint PKPEDIDO         primary key (ID_PEDIDO) using index;
+alter table PEDIDO add constraint FKPEDIDO_USUARIO foreign key (USUARIO)   references USUARIO (ID_USUARIO);
+--
+create table PEDIDO_ITEM
+(ID_PEDIDO_ITEM NUMBER not null,
+ PEDIDO         NUMBER not null,
+ PRODUTO        NUMBER not null,
+ QUANTIDADE     NUMBER not null,
+ VLR_VENDA      NUMBER(12,2) not null);
+comment on column PEDIDO_ITEM.ID_PEDIDO_ITEM is 'Identificador do item do pedido.';
+comment on column PEDIDO_ITEM.PEDIDO         is 'Identificador do pedido.';
+comment on column PEDIDO_ITEM.PRODUTO        is 'Produto do item do pedido.';
+comment on column PEDIDO_ITEM.QUANTIDADE     is 'Quantidade do item do pedido.';
+comment on column PEDIDO_ITEM.VLR_VENDA      is 'Valor de venda do item do pedido.';
+alter table PEDIDO_ITEM add constraint PKPEDIDO_ITEM            primary key (ID_PEDIDO_ITEM) using index;
+alter table PEDIDO_ITEM add constraint FKPEDIDO_ITEM_PEDITO     foreign key (PEDIDO)         references PEDIDO (ID_PEDIDO);
+alter table PEDIDO_ITEM add constraint FKPEDIDO_ITEM_PRODUTO    foreign key (PRODUTO)        references PRODUTO (ID_PRODUTO);
+alter table PEDIDO_ITEM add constraint CKPEDIDO_ITEM_QUANTIDADE check (quantidade > 0);
+--
 create or replace package pECommerce is
 --
 -- Criado por : Flávio
@@ -131,8 +163,8 @@ create or replace package pECommerce is
   -- Retorna o valor de uma sequence.
   -- pValor: [N]extval ou [C]urrval.
   -- ================================
-  function fRetornaSequence(pNomeSequence  varchar2,
-                            pValor         varchar2 := 'N') return number;
+  function fRetornaSequence(pNomeSequence varchar2,
+                            pValor        varchar2 := 'N') return number;
   --
   -- Função que retorna o valor de venda.
   -- pMaxMin - deve receber MAX para o maior valor ou MIN para o menor valor.
@@ -147,6 +179,12 @@ create or replace package pECommerce is
   -- Função que retorna a tabela de cores HTML.
   -- ==========================================
   function fRetornaTabelaCorHtml return clob;
+  --
+  -- Procedimento que baixa uma venda no estoque.
+  -- ============================================
+  procedure BaixaEstoque(pProduto    number,
+                         pQuantidade number,
+                         pValorVenda number);
 end pECommerce;
 /
 create or replace package body pECommerce is
@@ -159,8 +197,8 @@ create or replace package body pECommerce is
   -- Retorna o valor de uma sequence.
   -- pValor: [N]extval ou [C]urrval.
   -- ================================
-  function fRetornaSequence(pNomeSequence  varchar2,
-                            pValor         varchar2 := 'N') return number is
+  function fRetornaSequence(pNomeSequence varchar2,
+                            pValor        varchar2 := 'N') return number is
     vValor    varchar2(100);
     vResposta number;
   begin
@@ -263,6 +301,42 @@ create or replace package body pECommerce is
     --
     return vResposta;
   end fRetornaTabelaCorHtml;
+  --
+  -- Procedimento que baixa uma venda no estoque.
+  -- ============================================
+  procedure BaixaEstoque(pProduto    number,
+                         pQuantidade number,
+                         pValorVenda number) is
+    --
+    cursor cEstoque is
+      select min(a.id_estoque) estoque
+        from estoque a
+       where a.produto   = pProduto
+         and a.vlr_venda = pValorVenda;
+    --
+    vIdEstoque number;
+  begin
+    open cEstoque;
+    fetch cEstoque into vIdEstoque;
+    if cEstoque%notfound
+    then
+      raise_application_error
+      (-20000,'Estoque não encontrado para o produto ' || pProduto);
+    end if;
+    close cEstoque;
+    --
+    begin
+      update estoque a
+         set a.qtde_disp  = (a.qtde_disp - pQuantidade)
+       where a.id_estoque = vIdEstoque;
+    exception
+      when others
+        then
+          raise_application_error
+          (-20000,'Erro na atualização do estoque do produto ' || pProduto
+               || ' valor ' || pValorVenda || '. Erro: ' || substr(sqlerrm,1,255));
+    end;
+  end BaixaEstoque;
 end pECommerce;
 /
 --
@@ -330,9 +404,11 @@ create sequence smarca           minvalue 1 maxvalue 99999999999 start with 5 in
 create sequence smodelo          minvalue 1 maxvalue 99999999999 start with 4 increment by 1 nocache;
 create sequence sdepartamento    minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
 create sequence ssubdepartamento minvalue 1 maxvalue 99999999999 start with 5 increment by 1 nocache;
-create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 9 increment by 1 nocache;
-create sequence susuario         minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
-create sequence sestoque         minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
+create sequence sproduto         minvalue 1 maxvalue 99999999999 start with 6 increment by 1 nocache;
+create sequence susuario         minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
+create sequence sestoque         minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
+create sequence spedido          minvalue 1 maxvalue 99999999999 start with 2 increment by 1 nocache;
+create sequence spedidoitem      minvalue 1 maxvalue 99999999999 start with 1 increment by 1 nocache;
 --
 create or replace trigger tmarca_b_iud_r
   before insert
@@ -434,6 +510,15 @@ begin
   or updating
   then :new.permissao := lower(:new.permissao);
   end if;
+  --
+  if deleting
+  then
+    if lower(:old.usuario) = 'admin'
+    then
+      raise_application_error
+      (-20000,'Não é possível excluir o usuário administrador do sistema.');
+    end if;
+  end if;
 end tusuario_b_iud_r;
 /
 --
@@ -451,15 +536,48 @@ begin
 end testoque_b_iud_r;
 /
 --
+create or replace trigger tpedido_b_iud_r
+  before insert
+      or update
+      or delete
+      on pedido
+  for each row
 begin
-  insert into usuario (usuario, senha, permissao)
-  values ('admin', 'admin', 'admin');
+  if inserting
+  and :new.id_pedido is null
+  then :new.id_pedido := pECommerce.fRetornaSequence('SPEDIDO','N');
+  end if;
+end tpedido_b_iud_r;
+/
+--
+create or replace trigger tpedido_item_b_iud_r
+  before insert
+      or update
+      or delete
+      on pedido_item
+  for each row
+begin
+  if inserting
+  and :new.id_pedido_item is null
+  then
+    :new.id_pedido_item := pECommerce.fRetornaSequence('SPEDIDOITEM','N');
+    --
+    pECommerce.BaixaEstoque(pProduto    => :new.produto,
+                            pQuantidade => :new.quantidade,
+                            pValorVenda => :new.vlr_venda);
+  end if;
+end tpedido_item_b_iud_r;
+/
+--
+begin
+  insert into usuario (usuario, nome, senha, permissao)
+  values ('admin', 'Administrador do Sistema', 'admin', 'admin');
   --
-  insert into usuario (usuario, senha, permissao)
-  values ('ely', 'ely', 'user');
+  insert into usuario (usuario, nome, senha, permissao)
+  values ('ely', 'Ely', 'ely', 'user');
   --
-  insert into usuario (usuario, senha, permissao)
-  values ('flavio', 'flavio', 'user');
+  insert into usuario (usuario, nome, senha, permissao)
+  values ('flavio', 'Flávio', 'flavio', 'user');
   --
   commit;
   --
@@ -477,6 +595,12 @@ begin
   --
   insert into estoque(produto, dt_aquis, vlr_aquis, qtde_aquis, qtde_disp, vlr_venda)
   values (5, to_date('01/02/2010','dd/mm/rrrr'), 1980.20, 3, 2, 2749.90);
+  --
+  insert into pedido(id_pedido, usuario)
+  values(1,1);
+  --
+  insert into pedido_item(pedido, produto, quantidade, vlr_venda)
+  values(1, 4, 1, 1899.90);
   --
   commit;
 end;

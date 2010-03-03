@@ -7,7 +7,8 @@ import java.sql.ResultSet;
 
 public class UsuarioBean {
 
-    private int idUSuario;
+    private int idUsuario;
+    private String nome;
     private String usuario;
     private String senha;
     private String permissao;
@@ -15,12 +16,20 @@ public class UsuarioBean {
     public UsuarioBean() {
     }
 
-    public int getIdUSuario() {
-        return idUSuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setIdUSuario(int idUSuario) {
-        this.idUSuario = idUSuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getPermissao() {
@@ -104,5 +113,100 @@ public class UsuarioBean {
             System.out.println("Erro! " + e.getMessage());
         }
         return tpPermissao;
+    }
+
+    public void listarUsuario(int idUsuario) {
+        try {
+            Connection conn;
+            Conexao conecta;
+            conecta = new Conexao();
+            conn = conecta.metodoConecta();
+
+            String sql =
+                    "  select nome, "
+                    + "       usuario, "
+                    + "       senha, "
+                    + "       permissao, "
+                    + "       id_usuario "
+                    + "  from usuario "
+                    + " where id_usuario = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                setIdUsuario(rs.getInt(5));
+                setUsuario(rs.getString(2));
+                setSenha(rs.getString(3));
+                setPermissao(rs.getString(4));
+                setNome(rs.getString(1));
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void alterarUsuario() {
+        try {
+
+            String sql = "";
+
+            if (getIdUsuario() != 0) {
+                sql = "    update usuario "
+                        + "   set nome       = ?, "
+                        + "       usuario    = ?, "
+                        + "       senha      = ?, "
+                        + "       permissao  = ?"
+                        + " where id_usuario = ?";
+            } else {
+                sql = "    insert into usuario "
+                        + "  (nome, usuario, senha, permissao)"
+                        + "values"
+                        + "  (?, ?, ?, ?)";
+            }
+
+            Connection conn;
+            Conexao conecta;
+            conecta = new Conexao();
+            conn = conecta.metodoConecta();
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, getNome());
+            ps.setString(2, getUsuario());
+            ps.setString(3, getSenha());
+            ps.setString(4, getPermissao());
+
+            if (getIdUsuario() != 0) {
+                ps.setInt(5, getIdUsuario());
+            }
+            ps.executeUpdate();
+
+            ps.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void excluirUsuario(int idUsuario) throws Exception {
+        String sql = "delete from usuario where id_usuario = ?";
+
+        Connection conn;
+        Conexao conecta;
+        conecta = new Conexao();
+        conn = conecta.metodoConecta();
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idUsuario);
+        ps.executeUpdate();
+
+        ps.close();
+        conn.close();
     }
 }

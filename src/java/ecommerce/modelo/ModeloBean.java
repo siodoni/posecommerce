@@ -104,24 +104,19 @@ public class ModeloBean {
         }
     }
 
-    public void excluirModelo(int idModelo) {
-        try {
-            String sql = "delete from modelo where id_modelo = ?";
+    public void excluirModelo(int idModelo) throws Exception {
+        String sql = "delete from modelo where id_modelo = ?";
 
-            Connection conn;
-            Conexao conecta;
-            conecta = new Conexao();
-            conn = conecta.metodoConecta();
+        Connection conn;
+        Conexao conecta;
+        conecta = new Conexao();
+        conn = conecta.metodoConecta();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, idModelo);
-            ps.executeUpdate();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, idModelo);
+        ps.executeUpdate();
 
-            ps.close();
-            conn.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ps.close();
+        conn.close();
     }
 }

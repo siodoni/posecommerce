@@ -7,9 +7,7 @@
         <link rel="StyleSheet" href="css/geral.css" type="text/css"/>
     </head>
     <body>
-
         <jsp:include page="topo.jsp"></jsp:include>
-
         <%
                     int idSubDepartamento = Integer.parseInt(request.getParameter("pSubDepartamento"));
                     subdepartamento.listarSubDepartamento(idSubDepartamento);
@@ -35,7 +33,6 @@
                     </td>
                 </tr>
             </table>
-
             <br/>
             <center>
                 <a href="javascript:document.frm.submit();">Salvar</a>
@@ -43,9 +40,6 @@
                 <a href="listasubdepartamento.jsp">Cancelar</a>
             </center>
         </form>
-
         <jsp:include page="rodape.jsp"></jsp:include>
-
     </body>
 </html>
-

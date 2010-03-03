@@ -20,8 +20,21 @@ img{
 hr{
     line-height: 1px;
 }
+
 .login {
     font-size: 9px;
+}
+
+.pesquisa {
+    font-size: 12px;
+}
+
+.comprar{
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-style: solid;
+    border-color: white;
 }
 
 table{
@@ -47,6 +60,7 @@ td.par{
 td.impar{
     background-color: white;
 }
+
 h1 {
     font-size: 14px;
 }

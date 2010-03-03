@@ -130,6 +130,8 @@
                                                     out.println("d.add(9999993,999999,'Cad. Sub-Deptos','listasubdepartamento.jsp');");
                                                     out.println("d.add(9999994,999999,'Cad. Modelos','listamodelo.jsp');");
                                                     out.println("d.add(9999995,999999,'Cad. Produtos','listaprod.jsp');");
+                                                    out.println("d.add(9999996,999999,'Cad. Estoque','listaestoque.jsp');");
+                                                    out.println("d.add(9999997,999999,'Cad. Usuário','listausuario.jsp');");
                                                 } else {
                                                     out.println("d.add(999999100,999999,'Meus Pedidos','pedido.jsp');");
                                                 }

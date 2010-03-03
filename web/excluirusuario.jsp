@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="produto" scope="page" class="ecommerce.modelo.ProdutoBean"/>
+<jsp:useBean id="usuario" scope="page" class="ecommerce.modelo.UsuarioBean"/>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" lang="pt-br">
     <head>
         <title>:::EF - Instrumentos musicais:::</title>
@@ -10,10 +10,10 @@
         <%
                     boolean prossegue = true;
                     String mensagem = "";
-                    int idProduto = Integer.parseInt(request.getParameter("pProduto"));
+                    int idUsuario = Integer.parseInt(request.getParameter("pIdUsuario"));
 
                     try {
-                        produto.excluirProduto(idProduto);
+                        usuario.excluirUsuario(idUsuario);
                     } catch (Exception e) {
                         prossegue = false;
                         mensagem = e.toString();
@@ -22,8 +22,8 @@
                     if (prossegue) {
         %>
         <script language="javascript" type="text/javascript">
-            alert("Produto excluído com sucesso!");
-            document.location.href = "listamarca.jsp";
+            alert("Usuário excluído com sucesso!");
+            document.location.href = "listausuario.jsp";
         </script>
         <%          } else {
                         out.println("<center>");
