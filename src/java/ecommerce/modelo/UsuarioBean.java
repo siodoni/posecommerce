@@ -68,7 +68,7 @@ public class UsuarioBean {
 
             String sql =
                     "  select usuario,"
-                    + "       senha "
+                    + "       senha, id_usuario "
                     + "  from usuario "
                     + " where usuario = ? "
                     + "   and senha = ? ";
@@ -79,6 +79,11 @@ public class UsuarioBean {
             ResultSet dados = pre.executeQuery();
 
             acesso = dados.next() ? true : false;
+            if (acesso==true) {
+                setIdUsuario(Integer.parseInt(dados.getString("id_usuario")));
+            } else {
+                setIdUsuario(0);
+            }
             conn.close();
 
         } catch (Exception e) {

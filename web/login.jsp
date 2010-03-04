@@ -5,6 +5,7 @@
 
             if (usuario.getUsuario() != null) {
                 if (usuario.login()) {
+                    session.setAttribute("IdUsuario", usuario.getIdUsuario());
                     session.setAttribute("UsuarioLogado", usuario.getUsuario());
                     session.setAttribute("UsuarioPermissao", usuario.getTpPermissao());
                 } else {
@@ -14,6 +15,7 @@
             }
 
             if (request.getParameter("sair") != null) {
+                session.removeAttribute("IdUsuario");
                 session.removeAttribute("UsuarioLogado");
                 session.removeAttribute("UsuarioPermissao");
             }

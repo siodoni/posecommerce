@@ -42,11 +42,15 @@
         <td rowspan="4">
             <img name="layoutecommerce_r2_c10" src="img/layout-ecommerce_r2_c10.png" width="9" height="98" border="0" id="layoutecommerce_r2_c10" alt="" />
         </td>
-        <td colspan="3" bgcolor="#6CAA00">
-            <form action="index.jsp" method="post">
+        <td colspan="3" bgcolor="#6CAA00" >
+            <form action="index.jsp" method="get">
                 Pesquisa:
-                <input name="pRestricao" id="pRestricao" type="text" value="" size="30" class="pesquisa"/>
-                <input type="submit" value="Ok" name="login" class="pesquisa"/>
+                <input name="pRestricao" id="pRestricao" type="text" 
+                       value="<% if (request.getParameter("pRestricao")!=null) { out.print(request.getParameter("pRestricao")); } %>"
+                       size="20" class="pesquisa"/>
+                <input type="hidden" name="pProduto" value="<%= request.getParameter("pProduto") %>" />
+                <input type="hidden" name="pNivel" value="<%= request.getParameter("pNivel") %>" />
+                <input type="submit" value="Ok" class="pesquisa"/>
             </form>
         </td>
         <td colspan="2">

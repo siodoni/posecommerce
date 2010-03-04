@@ -12,7 +12,12 @@
                     String tableAnt = "", localAnt = "";
                     String produto = request.getParameter("pProduto");
                     String nivel = request.getParameter("pNivel");
+                    String restricao = "";
                     boolean usuarioLogado = false;
+                    
+                    if (request.getParameter("pRestricao")!=null) {
+                        restricao = request.getParameter("pRestricao");
+                    }
 
                     if (session.getAttribute("UsuarioPermissao") != null) {
                         usuarioLogado = true;
@@ -45,7 +50,7 @@
                             + "                 '   <a href=\"index.jsp?pProduto=' || nvl(a.departamento, 0) || nvl(a.sub_departamento, 0) ||                                        '&pNivel=2\">' || initcap(f.descricao) || '</a> - ' || "
                             + "                 '   <a href=\"index.jsp?pProduto=' || nvl(a.departamento, 0) || nvl(a.sub_departamento, 0) || nvl(b.marca, 0) ||                     '&pNivel=3\">' || initcap(c.descricao) || '</a> - ' || "
                             + "                 '<b><a href=\"index.jsp?pProduto=' || nvl(a.departamento, 0) || nvl(a.sub_departamento, 0) || nvl(b.marca, 0) || nvl(a.modelo, 0) || '&pNivel=4\">' || initcap(b.descricao) || '</a></b>' "
-                            + "       end local "
+                            + "       end local, a.id_produto, pECommerce.fRetornaVlrVenda(a.id_produto,'MAX') as vlrvenda  "
                             + "  from sub_departamento f, "
                             + "       departamento e, "
                             + "       cor d, "
@@ -75,6 +80,7 @@
                             + "   and d.id_cor              = a.cor "
                             + "   and e.id_departamento     = a.departamento "
                             + "   and f.id_sub_departamento = a.sub_departamento"
+                            + "   and (a.descricao || b.descricao || c.descricao) like upper(?)"
                             + " order by a.departamento, a.sub_departamento, b.marca, a.modelo, a.id_produto ";
 
                     Connection conn;
@@ -97,6 +103,7 @@
                     clst.setString(10, produto);
                     clst.setString(11, nivel);
                     clst.setString(12, produto);
+                    clst.setString(13, "%" + restricao + "%");
                     rs = clst.executeQuery();
 
                     while (rs.next()) {
@@ -117,8 +124,12 @@
 
                         if (usuarioLogado) {
                             out.println("<tr>");
-                            out.println("<form action=\"pedido.jsp\" method=\"post\">");
-                            out.println("<td>Qtd.<input id=\"pQtde\" type=\"text\" size=\"3\" maxlength=\"3\" value=\"1\" /></td>");
+                            out.println("<form action=\"gravarpedido.jsp\" method=\"post\">");
+                            out.println("<td>");
+                            out.println("Qtd.<input name=\"pQtde\" type=\"text\" size=\"3\" maxlength=\"3\" value=\"1\" />");
+                            out.println("<input name=\"pProduto\" type=\"hidden\" value=\""+ rs.getString("id_produto")  + "\" />");
+                            out.println("<input name=\"pVlrVenda\" type=\"hidden\" value=\""+ rs.getString("vlrvenda")  + "\" />");
+                            out.println("</td>");
                             out.println("<td><input type=\"submit\" class=\"comprar\" value=\"Comprar\"/></td>");
                             out.println("</form>");
                             out.println("</tr>");

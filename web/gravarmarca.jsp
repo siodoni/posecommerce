@@ -13,7 +13,7 @@
         %>
         <script language="javascript" type="text/javascript">
             alert("Marca gravada com sucesso!");
-            document.location.href = "listamarca.jsp";
+            document.location.href = "index.jsp";
         </script>
     </body>
 </html>
