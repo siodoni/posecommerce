@@ -558,13 +558,21 @@ create or replace trigger tpedido_item_b_iud_r
   for each row
 begin
   if inserting
-  and :new.id_pedido_item is null
   then
-    :new.id_pedido_item := pECommerce.fRetornaSequence('SPEDIDOITEM','N');
+    if :new.id_pedido_item is null
+    then :new.id_pedido_item := pECommerce.fRetornaSequence('SPEDIDOITEM','N');
+    end if;
     --
     pECommerce.BaixaEstoque(pProduto    => :new.produto,
                             pQuantidade => :new.quantidade,
                             pValorVenda => :new.vlr_venda);
+  end if;
+  --
+  if deleting
+  then
+    pECommerce.BaixaEstoque(pProduto    => :old.produto,
+                            pQuantidade => :old.quantidade * -1,
+                            pValorVenda => :old.vlr_venda);
   end if;
 end tpedido_item_b_iud_r;
 /

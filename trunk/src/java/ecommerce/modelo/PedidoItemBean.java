@@ -10,11 +10,12 @@ import java.sql.ResultSet;
  * @author ely
  */
 public class PedidoItemBean {
+
     private int idPedidoItem;
     private int pedido;
     private int produto;
     private int quantidade;
-    private float vlrVenda;
+    private double vlrVenda;
 
     public PedidoItemBean() {
     }
@@ -51,11 +52,11 @@ public class PedidoItemBean {
         this.quantidade = quantidade;
     }
 
-    public float getVlrVenda() {
+    public double getVlrVenda() {
         return vlrVenda;
     }
 
-    public void setVlrVenda(float vlrVenda) {
+    public void setVlrVenda(double vlrVenda) {
         this.vlrVenda = vlrVenda;
     }
 
@@ -119,7 +120,7 @@ public class PedidoItemBean {
             ps.setInt(1, getPedido());
             ps.setInt(2, getProduto());
             ps.setInt(3, getQuantidade());
-            ps.setFloat(4, getVlrVenda());
+            ps.setDouble(4, getVlrVenda());
             if (getIdPedidoItem() != 0) {
                 ps.setInt(5, getIdPedidoItem());
             }
@@ -133,7 +134,7 @@ public class PedidoItemBean {
             e.printStackTrace();
         }
     }
-    
+
     public void excluirPedidoItem(int idPedidoItem) throws Exception {
         String sql = "delete from pedido_item where id_pedido_item = ?";
 
@@ -149,5 +150,4 @@ public class PedidoItemBean {
         ps.close();
         conn.close();
     }
-
 }

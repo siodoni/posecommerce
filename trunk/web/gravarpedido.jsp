@@ -24,7 +24,7 @@
         %>
         <script language="javascript" type="text/javascript">
             alert("Produto comprado com sucesso!");
-            document.location.href = "listaProduto.jsp";
+            document.location.href = "index.jsp";
         </script>
     </body>
 </html>
