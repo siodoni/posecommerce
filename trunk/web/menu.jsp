@@ -65,10 +65,12 @@
                                                     + "   and c.id_sub_departamento = a.sub_departamento "
                                                     + "   and d.id_modelo           = a.modelo "
                                                     + "   and e.id_marca            = d.marca "
+                                                    /*
                                                     + "   and exists                (select 1 "
                                                     + "                                from estoque aa "
                                                     + "                               where aa.produto = a.id_produto "
                                                     + "                              having sum(aa.qtde_disp) > 0) "
+                                                    */
                                                     + " group by b.id_departamento, "
                                                     + "          b.descricao, "
                                                     + "          c.id_sub_departamento, "
